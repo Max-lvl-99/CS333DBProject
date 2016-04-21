@@ -3,9 +3,8 @@ GO
 IF OBJECT_ID('dbo.Inventory', 'U') IS NOT NULL 
 	DROP TABLE Inventory;
 CREATE TABLE Inventory(
-	InID int Identity(1,1),
 	ItID int,
-	PRIMARY KEY(InID),
+	PRIMARY KEY(ItID),
 	CONSTRAINT Inv_to_Item FOREIGN KEY (ItID) REFERENCES
 		Item (ItID) ON DELETE CASCADE ON UPDATE CASCADE
 	)

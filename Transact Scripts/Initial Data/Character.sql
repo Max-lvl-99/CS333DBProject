@@ -1,9 +1,11 @@
 Use MushVsGrump;
 GO
---First insert must be user character so it is index 1
-INSERT INTO Character (ChName, Exp, Base_HP)
-	VALUES ('Mighty Max', 0, 10);
-INSERT INTO Character (ChName, Exp, Base_HP)
-	VALUES ('Maniacal Lawyer', 0, 8);
-INSERT INTO Character (ChName, Exp, Base_HP)
-	VALUES ('Violent Redneck', 0, 9);
+--delete from Character;
+--DBCC CHECKIDENT ('Character', RESEED, 0);
+--go
+INSERT INTO Character (ChName, Base_HP)
+	VALUES ('User', 10);
+INSERT INTO Character (ChName, Base_HP)
+	VALUES ('Maniacal Lawyer', 8);
+INSERT INTO Character (ChName, Base_HP)
+	VALUES ('Violent Redneck', 9);
