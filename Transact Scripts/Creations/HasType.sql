@@ -1,7 +1,7 @@
 USE [MushVsGrump]
 GO
 
-/****** Object:  Table [dbo].[HasType]    Script Date: 4/19/2016 2:56:56 PM ******/
+/****** Object:  Table [dbo].[HasType]    Script Date: 4/21/2016 4:57:41 PM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -23,9 +23,13 @@ GO
 
 ALTER TABLE [dbo].[HasType]  WITH CHECK ADD FOREIGN KEY([WeaponType])
 REFERENCES [dbo].[WeaponType] ([WeaponType])
+ON UPDATE CASCADE
+ON DELETE CASCADE
 GO
 
 ALTER TABLE [dbo].[HasType]  WITH CHECK ADD FOREIGN KEY([WeID])
 REFERENCES [dbo].[Weapon] ([WeID])
+ON UPDATE CASCADE
+ON DELETE CASCADE
 GO
 

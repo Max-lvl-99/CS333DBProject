@@ -1,7 +1,7 @@
 USE [MushVsGrump]
 GO
 
-/****** Object:  Table [dbo].[WeaponType]    Script Date: 4/20/2016 9:12:57 AM ******/
+/****** Object:  Table [dbo].[WeaponType]    Script Date: 4/21/2016 4:57:29 PM ******/
 SET ANSI_NULLS ON
 GO
 

@@ -1,7 +1,7 @@
 USE [MushVsGrump]
 GO
 
-/****** Object:  Table [dbo].[Weapon]    Script Date: 4/20/2016 9:12:42 AM ******/
+/****** Object:  Table [dbo].[Weapon]    Script Date: 4/21/2016 4:57:14 PM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -12,7 +12,7 @@ SET ANSI_PADDING ON
 GO
 
 CREATE TABLE [dbo].[Weapon](
-	[WeID] [int] NOT NULL,
+	[WeID] [int] IDENTITY(1,1) NOT NULL,
 	[WeName] [varchar](20) NULL,
 	[Attack_Name] [varchar](30) NULL,
 	[Base_Damage] [real] NULL,
