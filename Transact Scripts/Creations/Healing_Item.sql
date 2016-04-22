@@ -1,7 +1,7 @@
 USE [MushVsGrump]
 GO
 
-/****** Object:  Table [dbo].[Healing_Item]    Script Date: 4/19/2016 4:53:58 PM ******/
+/****** Object:  Table [dbo].[Healing_Item]    Script Date: 4/22/2016 9:18:55 AM ******/
 SET ANSI_NULLS ON
 GO
 
