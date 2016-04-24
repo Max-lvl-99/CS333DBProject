@@ -31,8 +31,9 @@ public class ConnectURL {
 	public static void main(String[] args) {
 
 		// Create a variable for the connection string.
-		String connectionUrl = "jdbc:sqlserver://localhost:1433;"
-				+ "databaseName=AdventureWorks;integratedSecurity=true;";
+		String connectionUrl = "jdbc:sqlserver://137.112.104.37:1433;"
+				+ "databaseName=MushVsGrump;integratedSecurity=true;" + 
+				";username=mush;password:texasrules;"
 
 		// Declare the JDBC objects.
 		Connection con = null;
@@ -45,14 +46,14 @@ public class ConnectURL {
 			con = DriverManager.getConnection(connectionUrl);
 
 			// Create and execute an SQL statement that returns some data.
-			String SQL = "SELECT TOP 10 * FROM Person.Contact";
-			stmt = con.createStatement();
-			rs = stmt.executeQuery(SQL);
+			// String SQL = "SELECT TOP 10 * FROM Person.Contact";
+			// stmt = con.createStatement();
+			// rs = stmt.executeQuery(SQL);
 
 			// Iterate through the data in the result set and display it.
-			while (rs.next()) {
-				System.out.println(rs.getString(4) + " " + rs.getString(6));
-			}
+			// while (rs.next()) {
+			// System.out.println(rs.getString(4) + " " + rs.getString(6));
+			// }
 		}
 
 		// Handle any errors that may have occurred.

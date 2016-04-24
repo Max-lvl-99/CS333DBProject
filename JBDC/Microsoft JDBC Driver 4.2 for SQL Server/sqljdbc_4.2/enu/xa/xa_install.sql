@@ -4,7 +4,8 @@
 
 -- Notes for SQL Administrators:
 
--- #1. Prior to running this script you must copy the extended stored procedure dll SQLJDBC_XA.dll 
+-- #1. Prior to running this script you must copy the extended stored procedure 
+--     dll SQLJDBC_XA.dll 
 --     to the target SQL Server's Binn folder.
 
 -- #2. Permissions to the distributed transaction support procedures for the Microsoft JDBC Driver 4.2 
@@ -13,7 +14,7 @@
 
 -- Drop and re-create the extended stored procedure definitions in master.
 
-use master
+use MushVsGrump;
 go
 
 -- Drop any existing procedure definitions.
