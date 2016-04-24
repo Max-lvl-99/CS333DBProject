@@ -32,7 +32,8 @@ public class ConnectURL {
 
 		// Create a variable for the connection string.
 		String connectionUrl = "jdbc:sqlserver://137.112.104.37:1433;"
-				+ "databaseName=MushVsGrump;integratedSecurity=true;";
+				+ "databaseName=MushVsGrump;integratedSecurity=true;" +
+				"user=mush;password=texasrules;";
 
 		// Declare the JDBC objects.
 		Connection con = null;
