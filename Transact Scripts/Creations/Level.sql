@@ -19,3 +19,14 @@ PRIMARY KEY CLUSTERED
 
 GO
 
+ALTER TABLE [dbo].[Level]  WITH CHECK ADD  CONSTRAINT [CK_Level] CHECK  (([Exp]>(0)))
+GO
+
+ALTER TABLE [dbo].[Level] CHECK CONSTRAINT [CK_Level]
+GO
+
+ALTER TABLE [dbo].[Level]  WITH CHECK ADD  CONSTRAINT [CK_Level_1] CHECK  (([Level_num]>=(0)))
+GO
+
+ALTER TABLE [dbo].[Level] CHECK CONSTRAINT [CK_Level_1]
+GO

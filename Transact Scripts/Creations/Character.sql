@@ -8,3 +8,9 @@ Create TABLE Character(
 	Base_HP float(24),
 	PRIMARY KEY(ChID) 
 	)
+
+ALTER TABLE [dbo].[Character]  WITH CHECK ADD  CONSTRAINT [CK_Character] CHECK  (([BASE_HP]>(0)))
+GO
+
+ALTER TABLE [dbo].[Character] CHECK CONSTRAINT [CK_Character]
+GO
