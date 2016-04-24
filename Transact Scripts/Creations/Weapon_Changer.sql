@@ -13,7 +13,7 @@ GO
 
 CREATE TABLE [dbo].[Weapon_Changer](
 	[ItID] [int] NOT NULL,
-	[Amt_Changed] [int] NOT NULL,
+	[Amt_Changed] [float] NOT NULL,
 	[Weapon_Type] [varchar](12) NOT NULL
 ) ON [PRIMARY]
 
