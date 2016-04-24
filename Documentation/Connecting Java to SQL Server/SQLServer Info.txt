@@ -1,0 +1,6 @@
+local_net_address
+137.112.104.37
+local_tcp_port
+1433
+Server_name
+TITAN\TITAN
