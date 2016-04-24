@@ -1,7 +1,7 @@
 USE [MushVsGrump]
 GO
 
-/****** Object:  Table [dbo].[Healing_Item]    Script Date: 4/22/2016 9:18:55 AM ******/
+/****** Object:  Table [dbo].[Healing_Item]    Script Date: 4/24/2016 1:01:25 PM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -10,7 +10,7 @@ GO
 
 CREATE TABLE [dbo].[Healing_Item](
 	[ItID] [int] NOT NULL,
-	[HP_Healed] [int] NOT NULL
+	[HP_Healed] [float] NOT NULL
 ) ON [PRIMARY]
 
 GO
@@ -22,5 +22,11 @@ ON DELETE CASCADE
 GO
 
 ALTER TABLE [dbo].[Healing_Item] CHECK CONSTRAINT [FK_Healing_Item_Item]
+GO
+
+ALTER TABLE [dbo].[Healing_Item]  WITH CHECK ADD  CONSTRAINT [CK_Healing_Item] CHECK  (([HP_Healed]>(0)))
+GO
+
+ALTER TABLE [dbo].[Healing_Item] CHECK CONSTRAINT [CK_Healing_Item]
 GO
 
