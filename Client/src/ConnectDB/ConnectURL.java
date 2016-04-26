@@ -28,13 +28,26 @@ import java.sql.*;
 
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 
+/**
+ * Contains the method makeConnection(), which should be placed in the
+ * constructor of any Class which needs to access the DB. This allows DB access.
+ * 
+ * @author localmgr
+ *
+ */
 public class ConnectURL {
 
 	public static void main(String[] args) {
+	}
+
+	/**
+	 * Call this method to make a connection to the DB.
+	 */
+	public static void makeConnection() {
 
 		// Create a variable for the connection string.
-		String connectionUrl = "jdbc:sqlserver://137.112.104.37:1433;"
-				+ "databaseName=MushVsGrump;" + "user=mush;password=texasrules;";
+		String connectionUrl = "jdbc:sqlserver://137.112.104.37:1433;" + "databaseName=MushVsGrump;"
+				+ "user=mush;password=texasrules;";
 
 		// Declare the JDBC objects.
 		Connection con = null;
@@ -46,18 +59,18 @@ public class ConnectURL {
 
 			// Establish the connection.
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			 con = DriverManager.getConnection(connectionUrl);
-//			con = ds.getConnection();
+			con = DriverManager.getConnection(connectionUrl);
+			// con = ds.getConnection();
 
-			// Create and execute an SQL statement that returns some data.
-			 String SQL = "SELECT TOP 10 * FROM Character";
-			 stmt = con.createStatement();
-			 rs = stmt.executeQuery(SQL);
-			 System.out.println("i am here");
-			// Iterate through the data in the result set and display it.
-			 while (rs.next()) {
-			 System.out.println(rs.getString(4) + " " + rs.getString(6));
-			 }
+			// // Create and execute an SQL statement that returns some data.
+			// String SQL = "SELECT TOP 10 * FROM Character";
+			// stmt = con.createStatement();
+			// rs = stmt.executeQuery(SQL);
+			// System.out.println("i am here");
+			// // Iterate through the data in the result set and display it.
+			// while (rs.next()) {
+			// System.out.println(rs.getString(4) + " " + rs.getString(6));
+			// }
 		}
 
 		// Handle any errors that may have occurred.
