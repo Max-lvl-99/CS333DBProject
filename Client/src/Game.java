@@ -10,7 +10,7 @@ public class Game {
 	Scenario checkpoint;
 	Scenario current;
 	ArrayList<Character> act;
-
+	
 	public Game() {
 		// Make the connection to SQL Server for queries.
 		ConnectURL.makeConnection();
