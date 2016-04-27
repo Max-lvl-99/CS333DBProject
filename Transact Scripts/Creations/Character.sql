@@ -5,7 +5,7 @@ IF OBJECT_ID('dbo.Character', 'U') IS NOT NULL
 Create TABLE Character(
 	ChID int IDENTITY(1,1),
 	ChName varchar(20) UNIQUE CLUSTERED,
-	Base_HP float(24),
+	Base_HP float(24) Not Null,
 	PRIMARY KEY(ChID) 
 	)
 
