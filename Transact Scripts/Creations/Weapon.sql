@@ -13,9 +13,9 @@ GO
 
 CREATE TABLE [dbo].[Weapon](
 	[WeID] [int] IDENTITY(1,1) NOT NULL,
-	[WeName] [varchar](20) NULL,
-	[Attack_Name] [varchar](30) NULL,
-	[Base_Damage] [real] NULL,
+	[WeName] [varchar](20) NOT NULL,
+	[Attack_Name] [varchar](30) NOT NULL,
+	[Base_Damage] [real] NOT NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[WeID] ASC
@@ -23,6 +23,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 
 GO
+ALter Table Weapon Add Constraint We_dmg_pos Check (Base_Damage >= 0);
 
 SET ANSI_PADDING OFF
 GO

@@ -15,7 +15,10 @@ CREATE TABLE [dbo].[Level_Multiplier](
 ) ON [PRIMARY]
 
 GO
-
+Alter table Level_Multiplier Add Constraint Dmg_mult_pos 
+Check (Damage_Multiplier > 0);
+Alter table Level_Multiplier Add Constraint HP_mult_pos 
+Check (HP_Multiplier > 0);
 ALTER TABLE [dbo].[Level_Multiplier]  WITH CHECK ADD FOREIGN KEY([Level_num])
 REFERENCES [dbo].[Level] ([Level_num])
 GO
