@@ -1,9 +1,12 @@
-import ConnectDB.ConnectURL;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class Player {
+	// con must be used to access DB
+	Connection con;
 
-	public Player(String name) {
+	public Player(String name) throws SQLException {
 		// Make the connection to SQL Server for queries.
-		ConnectURL.makeConnection();
+		con = ConnectURL.makeConnection();
 	}
 }

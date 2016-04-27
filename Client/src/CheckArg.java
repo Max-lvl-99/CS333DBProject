@@ -20,9 +20,13 @@ public class CheckArg {
 	 * @return true if arg is okay to be passed into SQL
 	 */
 	public static boolean checkArgValid(String arg) {
+		if (arg == null) {
+			return true;
+		}
 		if (arg.contains(";") || arg.contains("'") || arg.contains("--")) {
 			return false;
 		}
+		System.out.println("returning true");
 		return true;
 	}
 }

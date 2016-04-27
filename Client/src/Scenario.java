@@ -1,7 +1,5 @@
 import java.util.ArrayList;
 
-import ConnectDB.ConnectURL;
-
 public class Scenario {
 	boolean left;
 	boolean right;

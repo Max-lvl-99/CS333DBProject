@@ -1,4 +1,6 @@
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -10,10 +12,12 @@ public class Game {
 	Scenario checkpoint;
 	Scenario current;
 	ArrayList<Character> act;
-	
-	public Game() {
+	// Needs to be referenced to access CD
+	Connection con;
+
+	public Game() throws SQLException {
 		// Make the connection to SQL Server for queries.
-		ConnectURL.makeConnection();
+		con = ConnectURL.makeConnection();
 		scan = new Scanner(System.in);
 		System.out.println("Please enter the name of your character.");
 

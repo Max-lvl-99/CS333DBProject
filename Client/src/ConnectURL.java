@@ -1,5 +1,4 @@
 
-
 //
 //  File:    connectURL.java      
 //  Summary: This Microsoft JDBC Driver for SQL Server sample application
@@ -41,8 +40,11 @@ public class ConnectURL {
 
 	/**
 	 * Call this method to make a connection to the DB.
+	 * 
+	 * @return
+	 * @throws SQLException
 	 */
-	public static void makeConnection() {
+	public static Connection makeConnection() throws SQLException {
 
 		// Create a variable for the connection string.
 		String connectionUrl = "jdbc:sqlserver://137.112.104.37:1433;" + "databaseName=MushVsGrump;"
@@ -50,7 +52,7 @@ public class ConnectURL {
 
 		// Declare the JDBC objects.
 		Connection con = null;
-		Statement stmt = null;
+		CallableStatement stmt = null;
 		ResultSet rs = null;
 
 		try {
@@ -70,29 +72,55 @@ public class ConnectURL {
 			// while (rs.next()) {
 			// System.out.println(rs.getString(4) + " " + rs.getString(6));
 			// }
+
+			// System.out.println("Please enter your username");
+			// // char[] password = r.readPassword(
+			// // "Please enter your password", username);
+			// System.out.println("Please enter your password");
+			// // Sanitize DB args
+			// System.out.println("Creating statement...");
+			// String sql = "{call checkUNameAndPass (?, ?)}";
+			// stmt = con.prepareCall(sql);
+			// stmt.setString(1, "max");
+			// stmt.setString(2, "morgan");
+			// System.out.println("before stmt execute()");
+			// boolean hadResults = stmt.execute();
+			// System.out.println("hadResults: " + hadResults);
+			// // Process all returned result sets
+			// while (hadResults) {
+			// rs = stmt.getResultSet();
+			// System.out.println("rs: " + rs);
+			// }
+			// process result set
+
+			// hadResults = stmt.getMoreResults();
+
+			return con;
 		}
 
 		// Handle any errors that may have occurred.
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+		return con;
 
-		finally {
-			if (rs != null)
-				try {
-					rs.close();
-				} catch (Exception e) {
-				}
-			if (stmt != null)
-				try {
-					stmt.close();
-				} catch (Exception e) {
-				}
-			if (con != null)
-				try {
-					con.close();
-				} catch (Exception e) {
-				}
-		}
+		// finally {
+		// if (rs != null)
+		// try {
+		// rs.close();
+		// } catch (Exception e) {
+		// }
+		// if (stmt != null)
+		// try {
+		// stmt.close();
+		// } catch (Exception e) {
+		// }
+		// if (con != null)
+		// try {
+		// con.close();
+		// } catch (Exception e) {
+		// }
+		// }
+
 	}
 }
