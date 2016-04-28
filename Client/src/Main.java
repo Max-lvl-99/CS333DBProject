@@ -94,7 +94,7 @@ public class Main {
 		}
 		System.out.println("Creating statement...");
 		String sql = "{call registerNewUser (?, ?)}";
-		con = ConnectURL.makeConnection();
+//		con = ConnectURL.makeConnection();
 		stmt = con.prepareCall(sql);
 		stmt.setString(1, next);
 		stmt.setString(2, pass);
