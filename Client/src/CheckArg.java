@@ -26,7 +26,6 @@ public class CheckArg {
 		if (arg.contains(";") || arg.contains("'") || arg.contains("--")) {
 			return false;
 		}
-		System.out.println("returning true");
 		return true;
 	}
 }

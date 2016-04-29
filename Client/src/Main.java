@@ -65,7 +65,6 @@ public class Main {
 			System.out.println("Invalid character in password.  ' ; -- not allowed");
 			return false;
 		} // Now we we can call the SP
-		System.out.println("Creating statement...");
 		String sql = "{? = call checkUNameAndPass (?, ?)}";
 		stmt = con.prepareCall(sql);
 		stmt.setString(2, next);
@@ -105,7 +104,6 @@ public class Main {
 			System.out.println("Invalid character in username.  ' ; --  not allowed.");
 			return false;
 		}
-		System.out.println("Creating statement...");
 		String sql = "{? = call checkUName (?)}";
 		// con = ConnectURL.makeConnection();
 		stmt = con.prepareCall(sql);
