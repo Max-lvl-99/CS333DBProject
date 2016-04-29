@@ -33,12 +33,16 @@ public class Main {
 		if (next.equals("r")) {
 			// If this returns false, it means the registration failed.
 			if (!registerNewUser(scan, pass, next)) {
-				return;
+				main(args);
+				// return;
+			}
+		} else if (next.equals("p")) {
+			if (!checkUNameAndPass(scan, next, pass)) {
+				main(args);
+				// return;
 			}
 		} else {
-			if (!checkUNameAndPass(scan, next, pass)) {
-				return;
-			}
+			main(args);
 		}
 		System.out.println("Would you like to start a new game? (y/n)");
 		next = scan.next();
@@ -71,7 +75,6 @@ public class Main {
 		stmt.setString(3, pass);
 		stmt.registerOutParameter(1, Types.INTEGER);
 		boolean hadResults = stmt.execute();
-		System.out.println("return result: " + stmt.getInt(1));
 		int result = stmt.getInt(1);
 		if (result == 1) {
 			System.out.println("This username and password combination does not exist");
