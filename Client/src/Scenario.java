@@ -1,4 +1,8 @@
+import java.sql.CallableStatement;
+import java.sql.Types;
 import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class Scenario {
 	boolean left;
@@ -12,8 +16,10 @@ public class Scenario {
 	int elevator;
 	int numberofEnemies;
 	ArrayList<Interactible> interactibles;
+	Connection con;
 
-	public Scenario(int progress, int floor, char action, Scenario prevScen) {
+	public Scenario(int progress, int floor, char action, Scenario prevScen) throws SQLException {
+		con = ConnectURL.makeConnection();
 		left = (Math.random() < .5);
 		right = (Math.random() < .5);
 		forward = (Math.random() < .5);
@@ -56,7 +62,7 @@ public class Scenario {
 
 		numberofEnemies = (int) (Math.random() * 3);
 		interactibles = new ArrayList<Interactible>();
-		int numofInteracts = (int) (Math.random() * 10);
+		int numofInteracts = (int) (Math.random() * 4);
 		for (int i = 0; i < numofInteracts; i++) {
 			generateInteractible();
 		}
@@ -83,13 +89,25 @@ public class Scenario {
 			actions.add('f');
 		int count = 0;
 		for (Interactible c : interactibles) {
-			actions.add((char) count);
+			actions.add((char) (count+48));
 			count++;
 		}
 		return actions;
 	}
 
-	public void generateInteractible() {
-
+	public void generateInteractible() throws SQLException {
+		CallableStatement cs;
+		int a = (int) (Math.random()*2);
+		if(a == 0){
+			cs = con.prepareCall("{call count_Items(?)}");
+		}
+		else {
+			cs = con.prepareCall("{call count_Weapon(?)}");		
+		}
+		cs.registerOutParameter(1, Types.INTEGER);
+        cs.execute();
+        int b = cs.getInt(1);
+		int c = (int) ((Math.random()*b)+1);
+		interactibles.add(new Interactible(a,c));
 	}
 }

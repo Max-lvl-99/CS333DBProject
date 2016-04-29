@@ -23,6 +23,7 @@ public class Main {
 		String pass = null;
 		Scanner scan = new Scanner(System.in);
 		Console console = System.console();
+		
 
 		// pass = new String(console.readPassword("Please enter your password:
 		// "));
