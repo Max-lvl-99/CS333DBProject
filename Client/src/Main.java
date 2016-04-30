@@ -23,7 +23,6 @@ public class Main {
 		String pass = null;
 		Scanner scan = new Scanner(System.in);
 		Console console = System.console();
-		
 
 		// pass = new String(console.readPassword("Please enter your password:
 		// "));
@@ -49,8 +48,10 @@ public class Main {
 		next = scan.next();
 		if (next.equals("y")) {
 			Game g = new Game();
-		} else
+		} else {
 			System.out.println("Thank you for playing");
+			return;
+		}
 		scan.close();
 	}
 
