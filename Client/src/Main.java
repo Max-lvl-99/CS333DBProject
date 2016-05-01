@@ -64,9 +64,10 @@ public class Main {
 		// char[] password = r.readPassword(
 		// "Please enter your password", username);
 		System.out.println("Please enter your password");
-		// pass = scan.next();
-		passc = System.console().readPassword();
-		pass = String.valueOf(passc);
+		 pass = scan.next();
+//		Uncomment this for Windows terminal
+//		passc = System.console().readPassword();
+//		pass = String.valueOf(passc);
 		// Sanitize DB args
 		if (!CheckArg.checkArgValid(next)) {
 			System.out.println("Invalid character in username.  ' ; --  not allowed.");
