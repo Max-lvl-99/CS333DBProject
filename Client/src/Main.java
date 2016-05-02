@@ -89,28 +89,46 @@ public class Main {
 			stmt.execute();
 			int result = stmt.getInt(1);
 			if (result == 0) {
-				System.out.println("You already have a character with name " + next);
+				System.out.println("You already have a character with name " + next + ".");
 				nextStep(next, scan, username, args);
 				return;
 			}
 			System.out.println("New character has been created!");
 		} else if (next.equals("v")) {
-			String sql = "{call getUserCharacters (?)}";
-			stmt = con.prepareCall(sql);
-			stmt.setString(1, username);
-			// stmt.execute();
-			ResultSet res = stmt.executeQuery();
-			while (res.next()) {
-				String name = res.getString(1);
-				if (name == null) {
-					System.out.println("You have no previously created characters");
-					nextStep(name, scan, name, args);
-				} else {
-					System.out.println(res.getString(1));
-				}
-			}
+			displayCharacters(next, scan, username, args, stmt, con);
 		} else if (next.equals("d")) {
-
+			System.out.println("Here are the names of your characters:");
+			displayCharacters(next, scan, username, args, stmt, con);
+			System.out.println("Type in the name of the character you want to delete:");
+			scan = new Scanner(System.in);
+			next = scan.nextLine();
+			System.out.println("delete: " + next);
+			String sql = "{? = call deleteUserCharacter (?, ?)}";
+			stmt = con.prepareCall(sql);
+			System.out.println("username: " + username);
+			boolean valid = CheckArg.checkArgValid(username);
+			if (!valid) {
+				System.out.println("Invalid character in input.  ' ; -- not allowed");
+				nextStep(next, scan, username, args);
+				return;
+			}
+			valid = CheckArg.checkArgValid(next);
+			if (!valid) {
+				System.out.println("Invalid character in input.  ' ; -- not allowed");
+				nextStep(next, scan, username, args);
+				return;
+			}
+			stmt.setString(2, username);
+			stmt.setString(3, next);
+			stmt.registerOutParameter(1, Types.INTEGER);
+			stmt.execute();
+			int result = stmt.getInt(1);
+			if (result == 0) {
+				System.out.println("You don't have a character of name " + next + ".");
+				nextStep(next, scan, username, args);
+				return;
+			}
+			System.out.println("Character " + next + " has been deleted.");
 		} else if (next.equals("l")) {
 			main(args);
 			return;
@@ -119,5 +137,22 @@ public class Main {
 			return;
 		}
 		scan.close();
+	}
+
+	static void displayCharacters(String next, Scanner scan, String username, String[] args, CallableStatement stmt2,
+			Connection con2) throws SQLException {
+		String sql = "{call getUserCharacters (?)}";
+		stmt = con.prepareCall(sql);
+		stmt.setString(1, username);
+		ResultSet res = stmt.executeQuery();
+		while (res.next()) {
+			String name = res.getString(1);
+			if (name == null) {
+				System.out.println("You have no previously created characters");
+				nextStep(next, scan, username, args);
+			} else {
+				System.out.println(res.getString(1));
+			}
+		}
 	}
 }
