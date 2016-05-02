@@ -82,6 +82,7 @@ public class Main {
 			}
 			String sql = "{? = call newUserCharacter (?, ?)}";
 			stmt = con.prepareCall(sql);
+			System.out.println("username: " + username);
 			stmt.setString(2, username);
 			stmt.setString(3, next);
 			stmt.registerOutParameter(1, Types.INTEGER);
@@ -98,8 +99,16 @@ public class Main {
 			stmt = con.prepareCall(sql);
 			stmt.setString(1, username);
 			// stmt.execute();
-			ResultSet chNames = stmt.executeQuery();
-			System.out.println(chNames.getMetaData());
+			ResultSet res = stmt.executeQuery();
+			while (res.next()) {
+				String name = res.getString(1);
+				if (name == null) {
+					System.out.println("You have no previously created characters");
+					nextStep(name, scan, name, args);
+				} else {
+					System.out.println(res.getString(1));
+				}
+			}
 		} else if (next.equals("d")) {
 
 		} else if (next.equals("l")) {
