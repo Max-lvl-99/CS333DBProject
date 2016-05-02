@@ -94,6 +94,7 @@ public class Main {
 				return;
 			}
 			System.out.println("New character has been created!");
+			Game g = new Game(new Player(username, next));
 		} else if (next.equals("v")) {
 			displayCharacters(next, scan, username, args, stmt, con);
 		} else if (next.equals("d")) {
@@ -105,7 +106,6 @@ public class Main {
 			System.out.println("delete: " + next);
 			String sql = "{? = call deleteUserCharacter (?, ?)}";
 			stmt = con.prepareCall(sql);
-			System.out.println("username: " + username);
 			boolean valid = CheckArg.checkArgValid(username);
 			if (!valid) {
 				System.out.println("Invalid character in input.  ' ; -- not allowed");
@@ -129,6 +129,7 @@ public class Main {
 				return;
 			}
 			System.out.println("Character " + next + " has been deleted.");
+			nextStep(next, scan, username, args);
 		} else if (next.equals("l")) {
 			main(args);
 			return;

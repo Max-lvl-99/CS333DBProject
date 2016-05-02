@@ -21,10 +21,9 @@ public class Game {
 		// Make the connection to SQL Server for queries.
 		con = ConnectURL.makeConnection();
 		scan = new Scanner(System.in);
-		System.out.println("Please enter the name of your character.");
 
 		String name = scan.next();
-		character = new Player(name);
+		// character = new Player(c);
 		Scenario checkpoint = new Scenario(0, 1);
 		current = checkpoint;
 
@@ -88,13 +87,13 @@ public class Game {
 			break;
 		}
 	}
-	
-	public void helpString() throws SQLException{
+
+	public void helpString() throws SQLException {
 		System.out.println("Which command do you need information on?");
 		String c = scan.next();
 		CallableStatement cs;
 		String b;
-		switch(c){
+		switch (c) {
 		case "f":
 			System.out.println("Go forward");
 			break;
@@ -112,14 +111,13 @@ public class Game {
 			break;
 		case "0":
 			System.out.println(current.interactibles.get(0).type);
-			if(current.interactibles.get(0).type ==0){
+			if (current.interactibles.get(0).type == 0) {
 				System.out.println("I");
 				cs = con.prepareCall("{call get_Item_Name(?,?)}");
+			} else {
+				cs = con.prepareCall("{call get_Weapon_Name(?,?)}");
 			}
-			else {
-				cs = con.prepareCall("{call get_Weapon_Name(?,?)}");	
-			}
-			cs.setInt(1,current.interactibles.get(0).id);
+			cs.setInt(1, current.interactibles.get(0).id);
 			cs.registerOutParameter(2, Types.VARCHAR);
 			cs.execute();
 			b = cs.getString(2);
@@ -127,14 +125,13 @@ public class Game {
 			break;
 		case "1":
 			System.out.println(current.interactibles.get(1).type);
-			if(current.interactibles.get(1).type ==0){
+			if (current.interactibles.get(1).type == 0) {
 				System.out.println("I");
 				cs = con.prepareCall("{call get_Item_Name(?,?)}");
+			} else {
+				cs = con.prepareCall("{call get_Weapon_Name(?,?)}");
 			}
-			else {
-				cs = con.prepareCall("{call get_Weapon_Name(?,?)}");	
-			}
-			cs.setInt(1,current.interactibles.get(1).id);
+			cs.setInt(1, current.interactibles.get(1).id);
 			cs.registerOutParameter(2, Types.VARCHAR);
 			cs.execute();
 			b = cs.getString(2);
@@ -142,14 +139,13 @@ public class Game {
 			break;
 		case "2":
 			System.out.println(current.interactibles.get(2).type);
-			if(current.interactibles.get(2).type ==0){
+			if (current.interactibles.get(2).type == 0) {
 				System.out.println("I");
 				cs = con.prepareCall("{call get_Item_Name(?,?)}");
+			} else {
+				cs = con.prepareCall("{call get_Weapon_Name(?,?)}");
 			}
-			else {
-				cs = con.prepareCall("{call get_Weapon_Name(?,?)}");	
-			}
-			cs.setInt(1,current.interactibles.get(2).id);
+			cs.setInt(1, current.interactibles.get(2).id);
 			cs.registerOutParameter(2, Types.VARCHAR);
 			cs.execute();
 			b = cs.getString(2);

@@ -6,6 +6,9 @@ CREATE TABLE User_Character(
 	Floor int default 1,
 	Room int default 1,
 	Exp float Default 0,
+	--To be updated when the player saves the game.
+	--Loaded into game when player loads the game.
+	Actual_hp float(24) default 10,
 	PRIMARY KEY(ChID),
 	CONSTRAINT UCh_to_Ch FOREIGN KEY (ChID) REFERENCES
 		Character (ChID) ON DELETE CASCADE ON UPDATE CASCADE,
