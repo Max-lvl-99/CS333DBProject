@@ -30,146 +30,85 @@ public class Main {
 		System.out.println("If you are a previous user, please press p; if you want to register "
 				+ "as a new user, please press r");
 		next = scan.next();
+		String username = null;
 		if (next.equals("r")) {
 			// If this returns false, it means the registration failed.
-			if (!registerNewUser(scan)) {
+			username = LoginAndRegistration.registerNewUser(scan, stmt, con);
+			if (username.equals("")) {
 				main(args);
-				// return;
+				return;
 			}
 		} else if (next.equals("p")) {
-			if (!checkUNameAndPass(scan)) {
+			username = LoginAndRegistration.checkUNameAndPass(scan, stmt, con);
+			if (username.equals("")) {
 				main(args);
-				// return;
+				return;
 			}
 		} else {
 			main(args);
 		}
-		System.out.println("Would you like to start a new game? (y/n)");
+		nextStep(next, scan, username, args);
+	}
+
+	private static void nextStep(String next, Scanner scan, String username, String[] args) throws SQLException {
+		System.out.println("Press e then enter to exit the game.  "
+				+ "Press n then enter to start a new game (and create a new character).  "
+				+ "Press v then enter to view your previously made characters.  "
+				+ "Press d then enter to delete one of your previously made characters.  "
+				+ "Press l then enter to enter your username and password again");
 		next = scan.next();
-		if (next.equals("y")) {
-			Game g = new Game();
+		if (next.equals("e")) {
+			return;
+			// Game g = new Game();
+		} else if (next.equals("n")) {
+			System.out.println("Please enter the name of your new character:");
+			scan = new Scanner(System.in);
+			next = scan.nextLine();
+			boolean valid = CheckArg.checkArgValid(next);
+			if (!valid) {
+				System.out.println("Invalid character in password.  ' ; -- not allowed");
+				nextStep(next, scan, username, args);
+				return;
+			}
+			if (next.length() > 20) {
+				System.out.println("Username may not exceed 20 characters");
+				nextStep(next, scan, username, args);
+				return;
+			}
+			if (next.equals("")) {
+				System.out.println("Your character must have a name!");
+				nextStep(next, scan, username, args);
+				return;
+			}
+			String sql = "{? = call newUserCharacter (?, ?)}";
+			stmt = con.prepareCall(sql);
+			stmt.setString(2, username);
+			stmt.setString(3, next);
+			stmt.registerOutParameter(1, Types.INTEGER);
+			stmt.execute();
+			int result = stmt.getInt(1);
+			if (result == 0) {
+				System.out.println("You already have a character with name " + next);
+				nextStep(next, scan, username, args);
+				return;
+			}
+			System.out.println("New character has been created!");
+		} else if (next.equals("v")) {
+			String sql = "{call getUserCharacters (?)}";
+			stmt = con.prepareCall(sql);
+			stmt.setString(1, username);
+			// stmt.execute();
+			ResultSet chNames = stmt.executeQuery();
+			System.out.println(chNames.getMetaData());
+		} else if (next.equals("d")) {
+
+		} else if (next.equals("l")) {
+			main(args);
+			return;
 		} else {
 			System.out.println("Thank you for playing");
 			return;
 		}
 		scan.close();
 	}
-
-	private static boolean checkUNameAndPass(Scanner scan) throws SQLException {
-		System.out.println("Please enter your username");
-		String next;
-		char[] passc;
-		String pass;
-		next = scan.next();
-		// char[] password = r.readPassword(
-		// "Please enter your password", username);
-		System.out.println("Please enter your password");
-		 pass = scan.next();
-//		Uncomment this for Windows terminal
-//		passc = System.console().readPassword();
-//		pass = String.valueOf(passc);
-		// Sanitize DB args
-		if (!CheckArg.checkArgValid(next)) {
-			System.out.println("Invalid character in username.  ' ; --  not allowed.");
-			return false;
-		}
-		if (!CheckArg.checkArgValid(pass)) {
-			System.out.println("Invalid character in password.  ' ; -- not allowed");
-			return false;
-		} // Now we we can call the SP
-		String sql = "{? = call checkUNameAndPass (?, ?)}";
-		stmt = con.prepareCall(sql);
-		stmt.setString(2, next);
-		stmt.setString(3, pass);
-		stmt.registerOutParameter(1, Types.INTEGER);
-		boolean hadResults = stmt.execute();
-		int result = stmt.getInt(1);
-		if (result == 1) {
-			System.out.println("This username and password combination does not exist");
-			return false;
-		}
-		return true;
-		// Process all returned result sets
-		// while (hadResults) {
-		// ResultSet rs = stmt.getResultSet();
-		// System.out.println("rs: " + rs);
-		// }
-		// process result set
-
-		// hadResults = stmt.getMoreResults();
-	}
-
-	private static boolean registerNewUser(Scanner scan) throws SQLException {
-		String pass;
-		String next;
-		System.out.println("Please enter a username");
-		next = scan.next();
-		if (!CheckArg.checkArgValid(next)) {
-			System.out.println("Invalid character in username.  ' ; --  not allowed.");
-			main(new String[1]);
-		}
-		String sql = "{? = call checkUName (?)}";
-		// con = ConnectURL.makeConnection();
-		stmt = con.prepareCall(sql);
-		stmt.setString(2, next);
-		stmt.registerOutParameter(1, Types.INTEGER);
-		boolean hadResults = stmt.execute();
-		int result = stmt.getInt(1);
-		if (result == 1) {
-			System.out.println("The username " + next + " already exists.");
-			main(new String[1]);
-		}
-		System.out.println("Please enter your password");
-		pass = scan.next();
-		if (!CheckArg.checkArgValid(pass)) {
-			System.out.println("Invalid character in password.  ' ; -- not allowed");
-			main(new String[1]);
-		}
-		sql = "{? = call registerNewUser (?, ?)}";
-		stmt = con.prepareCall(sql);
-		stmt.setString(2, next);
-		stmt.setString(3, pass);
-		stmt.registerOutParameter(1, Types.INTEGER);
-		if (!CheckArg.checkArgValid(pass)) {
-			System.out.println("Invalid character in password.  ' ; -- not allowed");
-			return false;
-		}
-		hadResults = stmt.execute();
-		int results = stmt.getInt(1);
-		if (results == 1) {
-			System.out.println("The username " + next + " already exists.");
-			return false;
-		}
-		System.out.println("Registration successful!");
-		return true;
-		// // Process all returned result sets
-		// while (hadResults) {
-		// ResultSet rs = stmt.getResultSet();
-		// System.out.println("rs2: " + rs);
-		// }
-		// Sanitize DB args
-		// Now we we can call the SP
-
-		// process result set
-
-		// hadResults = stmt.getMoreResults();
-	}
-
-	class ReadMyPassword {
-		public char[] readPassword(String format, Object... args) throws IOException {
-			if (System.console() != null)
-				return System.console().readPassword(format, args);
-			return this.readLine(format, args).toCharArray();
-		}
-
-		private String readLine(String format, Object... args) throws IOException {
-			if (System.console() != null) {
-				return System.console().readLine(format, args);
-			}
-			System.out.print(String.format(format, args));
-			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-			return reader.readLine();
-		}
-	}
-
 }

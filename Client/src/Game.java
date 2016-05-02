@@ -17,7 +17,7 @@ public class Game {
 	// Needs to be referenced to access CD
 	Connection con;
 
-	public Game() throws SQLException {
+	public Game(Player character) throws SQLException {
 		// Make the connection to SQL Server for queries.
 		con = ConnectURL.makeConnection();
 		scan = new Scanner(System.in);
