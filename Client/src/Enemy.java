@@ -3,16 +3,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Player {
-	private float actualHP;
+public class Enemy {
 	private float baseHP;
 	// maxHP is calculated client-side by multiplying baseHP and hpMult
 	private float maxHP;
-	private float exp;
-	private int floor;
-	private int room;
-	private int chID;
-	private int inID;
 	private float dmgMult;
 	private float hpMult;
 	// con must be used to access DB
@@ -20,30 +14,23 @@ public class Player {
 	// CallableStatement is used for stored procedures
 	CallableStatement stmt;
 
-	public Player(String username, String chName) throws SQLException {
+	public Enemy(int lvl, String chName) throws SQLException {
 		// Make the connection to SQL Server for queries.
 		this.con = ConnectURL.makeConnection();
-		String sql = "{call getUserCharacter (?, ?)}";
+		String sql = "{call getUEnemy (?, ?)}";
 		stmt = con.prepareCall(sql);
-		stmt.setString(1, username);
-		stmt.setString(2, chName);
+		stmt.setString(1, chName);
+		stmt.setString(2, Integer.toString(lvl));
 		ResultSet res = stmt.executeQuery();
 		// Use res.getString to get columns from returned row
 		// 1: Actual_hp 2: Base_HP 3: Exp 4: Floor 5: Room
 		// 6: ChID 7: InID
 		while (res.next()) {
-			this.actualHP = Float.parseFloat(res.getString(1));
-			this.baseHP = Float.parseFloat(res.getString(2));
-			this.exp = Float.parseFloat(res.getString(3));
-			this.floor = Integer.parseInt(res.getString(4));
-			this.room = Integer.parseInt(res.getString(5));
-			this.chID = Integer.parseInt(res.getString(6));
-			this.inID = Integer.parseInt(res.getString(7));
-
+			this.baseHP = Float.parseFloat(res.getString(1));
 		}
-		sql = "{call getMultipliersExp (?)}";
+		sql = "{call getMultipliersLvl (?)}";
 		stmt = con.prepareCall(sql);
-		stmt.setString(1, Float.toString(this.exp));
+		stmt.setString(1, Integer.toString(lvl));
 		res = stmt.executeQuery();
 		while (res.next()) {
 			this.dmgMult = Float.parseFloat(res.getString(1));
@@ -51,4 +38,5 @@ public class Player {
 		}
 		this.maxHP = this.baseHP * this.hpMult;
 	}
+
 }

@@ -2,6 +2,7 @@ Alter Proc [getUserCharacters]
 	(@Username	varchar(20))
 AS
 Set Nocount On;
+--Insert all character IDs that belong to this user
 Declare @ChIDs Table (ChIDT int);
 Insert Into @ChIDs (ChIDT) 
 	Select ChID From UsernameToUserCharacters Where Username = @Username;

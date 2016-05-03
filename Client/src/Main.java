@@ -53,7 +53,7 @@ public class Main {
 	private static void nextStep(String next, Scanner scan, String username, String[] args) throws SQLException {
 		System.out.println("Press e then enter to exit the game.  "
 				+ "Press n then enter to start a new game (and create a new character).  "
-				+ "Press v then enter to view your previously made characters.  "
+				+ "Press p then enter to play as one of your previously made characters.  "
 				+ "Press d then enter to delete one of your previously made characters.  "
 				+ "Press l then enter to enter your username and password again");
 		next = scan.next();
@@ -95,8 +95,11 @@ public class Main {
 			}
 			System.out.println("New character has been created!");
 			Game g = new Game(new Player(username, next));
-		} else if (next.equals("v")) {
+		} else if (next.equals("p")) {
 			displayCharacters(next, scan, username, args, stmt, con);
+			scan = new Scanner(System.in);
+			next = scan.nextLine();
+			Player p = new Player(username, next);
 		} else if (next.equals("d")) {
 			System.out.println("Here are the names of your characters:");
 			displayCharacters(next, scan, username, args, stmt, con);

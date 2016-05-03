@@ -7,7 +7,7 @@ Declare @ChIDs Table (ChIDT int);
 Insert Into @ChIDs (ChIDT) 
 	Select ChID From UsernameToUserCharacters Where Username = @Username;
 --Retrieve the character that belongs to this user and has chName passed in
-select U.Actual_hp, U.Exp, U.Floor, U.Room, U.ChID, U.InID, C.Base_HP
+select U.Actual_hp, C.Base_HP, U.Exp, U.Floor, U.Room, U.ChID, U.InID
 	from Character As C, User_Character as U 
 	where C.ChID In (Select ChIDT from @ChIDs) And 
 	U.ChID In (Select ChIDT from @ChIDs) And 
