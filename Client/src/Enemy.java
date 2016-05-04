@@ -9,6 +9,9 @@ public class Enemy {
 	private float maxHP;
 	private float dmgMult;
 	private float hpMult;
+	private String weaponName;
+	private String weaponPoison;
+	private float maxWeaponDmg;
 	// con must be used to access DB
 	Connection con;
 	// CallableStatement is used for stored procedures

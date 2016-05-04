@@ -15,6 +15,9 @@ public class Player {
 	private int inID;
 	private float dmgMult;
 	private float hpMult;
+	private String weaponName;
+	private String weaponPoison;
+	private float maxWeaponDmg;
 	// con must be used to access DB
 	Connection con;
 	// CallableStatement is used for stored procedures
@@ -39,7 +42,6 @@ public class Player {
 			this.room = Integer.parseInt(res.getString(5));
 			this.chID = Integer.parseInt(res.getString(6));
 			this.inID = Integer.parseInt(res.getString(7));
-
 		}
 		sql = "{call getMultipliersExp (?)}";
 		stmt = con.prepareCall(sql);
