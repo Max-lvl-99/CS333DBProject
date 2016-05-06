@@ -58,7 +58,8 @@ public class Main {
 				+ "Press l then enter to enter your username and password again");
 		next = scan.next();
 		if (next.equals("e")) {
-			return;
+			scan.close();
+			System.exit(0);
 			// Game g = new Game();
 		} else if (next.equals("n")) {
 			System.out.println("Please enter the name of your new character:");
@@ -101,6 +102,10 @@ public class Main {
 			}
 			scan = new Scanner(System.in);
 			next = scan.nextLine();
+			if (next.equals("")) {
+				System.out.println("You didn't choose a character");
+				main(new String[1]);
+			}
 			Game g = new Game(new Player(username, next));
 		} else if (next.equals("d")) {
 			System.out.println("Here are the names of your characters:");

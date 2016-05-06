@@ -6,7 +6,7 @@ Insert into @chUsernames (chUsername)
 	Exec getUserCharacters @Username = @Username;
 If (Select Count(*) From @chUsernames Where chUsername = @UCName) > 0
 Begin
-	Print 'The username ' + Convert(varchar(30), @Username) + ' already exists'
+	Print 'The character name ' + Convert(varchar(30), @Username) + ' already exists'
 	return 0;
 End
 --Insert new user character into User_Character table

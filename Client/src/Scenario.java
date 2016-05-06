@@ -90,6 +90,7 @@ public class Scenario {
 		actions.add('i');
 		actions.add('d');
 		// actions.add('u'); next milestone
+		actions.add('e');
 		int count = 0;
 		for (Interactible c : interactibles) {
 			actions.add((char) (count + 48));

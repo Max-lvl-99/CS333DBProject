@@ -14,7 +14,7 @@ BEGIN
     SET @MyCursor = CURSOR FOR
     select ChIDT From @ChIDs; 
     OPEN @MyCursor;
-    --FETCH NEXT FROM @MyCursor Into @tempChID;
+    FETCH NEXT FROM @MyCursor Into @tempChID;
     WHILE @@FETCH_STATUS = 0
     BEGIN
 		Select @UserN = ChName From Character Where ChID = @tempChID;

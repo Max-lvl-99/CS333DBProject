@@ -37,7 +37,7 @@ public class Game {
 		while (true) {
 			act = getActions();
 			System.out.println("l: go left; r: go right; f: go forward; "
-					+ "i: view inventory; d: delete from inventory; h: help");
+					+ "i: view inventory; d: delete from inventory; h: help; e: exit");
 			System.out.println("Your choices are: " + stringActions());
 			String c = scan.next();
 			handleActions(c);
@@ -61,6 +61,9 @@ public class Game {
 	}
 
 	public void handleActions(String c) throws SQLException {
+		ResultSet res;
+		StringBuilder str;
+		String sql;
 		switch (c) {
 		case "f":
 			if (current.forwardScen != null)
@@ -89,6 +92,44 @@ public class Game {
 		case "h":
 			helpString();
 			break;
+		case "i":
+			sql = "{call [Display Inventory] (?)}";
+			stmt = con.prepareCall(sql);
+			stmt.setInt(1, Player.inID);
+			res = stmt.executeQuery();
+			str = new StringBuilder();
+			while (res.next()) {
+				str.append(res.getString(1));
+				str.append(" (");
+				str.append(res.getString(2));
+				str.append("):    ");
+			}
+			System.out.println(str.toString());
+			break;
+		// DONE: Ryan make the inventory show up here
+		case "d":
+			sql = "{call [UpdateItemInInventory] (?,?,?)}";
+			stmt = con.prepareCall(sql);
+			stmt.setInt(1, Player.inID);
+
+			System.out.println("Insert item ID to update");
+			int i = scan.nextInt();
+			stmt.setInt(2, i);
+
+			System.out.println("Insert amount to update (negative for removal)");
+			i = scan.nextInt();
+			stmt.setInt(3, i);
+
+			stmt.executeUpdate();
+
+			System.out.println(i + " items added!");
+			break;
+		// DONE: Ryan allow the user to delete item(s) here
+		case "u":
+			// TODO: Next Milestone -- Use items
+		case "e":
+			scan.close();
+			System.exit(0);
 		}
 	}
 
@@ -116,42 +157,42 @@ public class Game {
 		case "h":
 			System.out.println("This is the help function");
 			break;
-		case "i":
-			
-			sql = "{call [Display Inventory] (?)}";
-			stmt = con.prepareCall(sql);
-			stmt.setInt(1, Player.inID);
-			res = stmt.executeQuery();
-			str = new StringBuilder();
-			while (res.next()) {
-				str.append(res.getString(1));
-				str.append(" (");
-				str.append(res.getString(2));
-				str.append("):    ");
-			}
-			System.out.println(str.toString());
-			break;
-			// DONE: Ryan make the inventory show up here
-		case "d":
-			sql = "{call [UpdateItemInInventory] (?,?,?)}";
-			stmt = con.prepareCall(sql);
-			stmt.setInt(1, Player.inID);
-			
-			System.out.println("Insert item ID to update");
-			int i = scan.nextInt();
-			stmt.setInt(2, i);
-
-			System.out.println("Insert amount to update (negative for removal)");
-			i = scan.nextInt();
-			stmt.setInt(3, i);
-			
-			stmt.executeUpdate();
-
-			System.out.println(i + " items added!");
-			break;
-			// DONE: Ryan allow the user to delete item(s) here
-		case "u":
-			// TODO: Next Milestone -- Use items
+		// case "i":
+		//
+		// sql = "{call [Display Inventory] (?)}";
+		// stmt = con.prepareCall(sql);
+		// stmt.setInt(1, Player.inID);
+		// res = stmt.executeQuery();
+		// str = new StringBuilder();
+		// while (res.next()) {
+		// str.append(res.getString(1));
+		// str.append(" (");
+		// str.append(res.getString(2));
+		// str.append("): ");
+		// }
+		// System.out.println(str.toString());
+		// break;
+		// // DONE: Ryan make the inventory show up here
+		// case "d":
+		// sql = "{call [UpdateItemInInventory] (?,?,?)}";
+		// stmt = con.prepareCall(sql);
+		// stmt.setInt(1, Player.inID);
+		//
+		// System.out.println("Insert item ID to update");
+		// int i = scan.nextInt();
+		// stmt.setInt(2, i);
+		//
+		// System.out.println("Insert amount to update (negative for removal)");
+		// i = scan.nextInt();
+		// stmt.setInt(3, i);
+		//
+		// stmt.executeUpdate();
+		//
+		// System.out.println(i + " items added!");
+		// break;
+		// // DONE: Ryan allow the user to delete item(s) here
+		// case "u":
+		// // TODO: Next Milestone -- Use items
 		case "0":
 			System.out.println(current.interactibles.get(0).type);
 			if (current.interactibles.get(0).type == 0) {
