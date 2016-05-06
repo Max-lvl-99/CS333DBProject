@@ -106,6 +106,18 @@ public class Game {
 				str.append("): ");
 			}
 			System.out.println(str.toString());
+			sql = "{call displayWeapons (?)}";
+			stmt = con.prepareCall(sql);
+			stmt.setInt(1, Player.inID);
+			res = stmt.executeQuery();
+			str = new StringBuilder();
+			while (res.next()) {
+				str.append(res.getString(1));
+				str.append(" (");
+				str.append(res.getString(2));
+				str.append("): ");
+			}
+			System.out.println(str.toString());
 			break;
 		// DONE: Ryan make the inventory show up here
 		case "d":
