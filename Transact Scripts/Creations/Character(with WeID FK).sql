@@ -1,6 +1,12 @@
 USE [MushVsGrump]
 GO
 
+--Drop Table User_Character
+--Drop Table Has
+--Drop Table ChToInv
+--Drop Table UsernameToUserCharacters
+Drop Table Character
+
 /****** Object:  Table [dbo].[Character]    Script Date: 5/4/2016 11:24:26 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -11,7 +17,7 @@ GO
 SET ANSI_PADDING ON
 GO
 
-CREATE TABLE [dbo].[Character](
+Create TABLE [dbo].[Character](
 	[ChID] [int] IDENTITY(1,1) NOT NULL,
 	[ChName] [varchar](20) NULL,
 	[CurrentlyWielding] [int] NULL,
@@ -27,7 +33,7 @@ GO
 SET ANSI_PADDING OFF
 GO
 
-ALTER TABLE [dbo].[Character] ADD  DEFAULT ((0)) FOR [CurrentlyWielding]
+ALTER TABLE [dbo].[Character] ADD  DEFAULT ((1)) FOR [CurrentlyWielding]
 GO
 
 ALTER TABLE [dbo].[Character]  WITH CHECK ADD FOREIGN KEY([CurrentlyWielding])
