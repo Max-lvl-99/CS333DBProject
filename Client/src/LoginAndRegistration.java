@@ -13,10 +13,10 @@ public class LoginAndRegistration {
 		String pass;
 		next = scan.next();
 		System.out.println("Please enter your password");
-		pass = scan.next();
+		// pass = scan.next();
 		// Uncomment this for Windows terminal
-		// passc = System.console().readPassword();
-		// pass = String.valueOf(passc);
+		passc = System.console().readPassword();
+		pass = String.valueOf(passc);
 		// Sanitize DB args
 		if (!CheckArg.checkArgValid(next)) {
 			System.out.println("Invalid character in username.  ' ; --  not allowed.");
@@ -60,11 +60,25 @@ public class LoginAndRegistration {
 			System.out.println("The username " + next + " already exists.");
 			Main.main(new String[1]);
 		}
-		System.out.println("Please enter your password");
-		pass = scan.next();
+		System.out.println("Please enter a password (it will be hidden)");
+		// pass = scan.next();
+		// Uncomment this for Windows terminal
+		char[] passc = System.console().readPassword();
+		pass = String.valueOf(passc);
+		System.out.println("Please enter the password again");
+		// String passAgain = scan.next();
+		// Uncomment this for Windows terminal
+		char[] passcAgain = System.console().readPassword();
+		String passAgain = String.valueOf(passcAgain);
+		if (!pass.equals(passAgain)) {
+			System.out.println("Your passwords did not match");
+			Main.main(new String[1]);
+			return "";
+		}
 		if (!CheckArg.checkArgValid(pass)) {
 			System.out.println("Invalid character in password.  ' ; -- not allowed");
 			Main.main(new String[1]);
+			return "";
 		}
 		sql = "{? = call registerNewUser (?, ?)}";
 		stmt = con.prepareCall(sql);
@@ -73,12 +87,14 @@ public class LoginAndRegistration {
 		stmt.registerOutParameter(1, Types.INTEGER);
 		if (!CheckArg.checkArgValid(pass)) {
 			System.out.println("Invalid character in password.  ' ; -- not allowed");
+			Main.main(new String[1]);
 			return "";
 		}
 		hadResults = stmt.execute();
 		int results = stmt.getInt(1);
 		if (results == 1) {
 			System.out.println("The username " + next + " already exists.");
+			Main.main(new String[1]);
 			return "";
 		}
 		System.out.println("Registration successful!");
