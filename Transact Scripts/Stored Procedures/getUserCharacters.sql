@@ -14,13 +14,13 @@ BEGIN
     SET @MyCursor = CURSOR FOR
     select ChIDT From @ChIDs; 
     OPEN @MyCursor;
-    FETCH NEXT FROM @MyCursor Into @tempChID;
+    --FETCH NEXT FROM @MyCursor Into @tempChID;
     WHILE @@FETCH_STATUS = 0
     BEGIN
-		FETCH NEXT FROM @MyCursor Into @tempChID;
 		Select @UserN = ChName From Character Where ChID = @tempChID;
 		Insert Into @Usernames (UsernameT)
 		Values (@UserN);
+		FETCH NEXT FROM @MyCursor Into @tempChID;
     END; 
     CLOSE @MyCursor;
     DEALLOCATE @MyCursor;

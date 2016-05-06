@@ -82,7 +82,6 @@ public class Main {
 			}
 			String sql = "{? = call newUserCharacter (?, ?)}";
 			stmt = con.prepareCall(sql);
-			System.out.println("username: " + username);
 			stmt.setString(2, username);
 			stmt.setString(3, next);
 			stmt.registerOutParameter(1, Types.INTEGER);
@@ -96,10 +95,13 @@ public class Main {
 			System.out.println("New character has been created!");
 			Game g = new Game(new Player(username, next));
 		} else if (next.equals("p")) {
-			displayCharacters(next, scan, username, args, stmt, con);
+			boolean goOn = displayCharacters(next, scan, username, args, stmt, con);
+			if (!goOn) {
+				nextStep(next, scan, username, args);
+			}
 			scan = new Scanner(System.in);
 			next = scan.nextLine();
-			Player p = new Player(username, next);
+			Game g = new Game(new Player(username, next));
 		} else if (next.equals("d")) {
 			System.out.println("Here are the names of your characters:");
 			displayCharacters(next, scan, username, args, stmt, con);
@@ -143,7 +145,7 @@ public class Main {
 		scan.close();
 	}
 
-	static void displayCharacters(String next, Scanner scan, String username, String[] args, CallableStatement stmt2,
+	static boolean displayCharacters(String next, Scanner scan, String username, String[] args, CallableStatement stmt2,
 			Connection con2) throws SQLException {
 		String sql = "{call getUserCharacters (?)}";
 		stmt = con.prepareCall(sql);
@@ -151,16 +153,17 @@ public class Main {
 		ResultSet res = stmt.executeQuery();
 		if (!res.isBeforeFirst()) {
 			System.out.println("You have no previously created characters");
-			nextStep(next, scan, username, args);
-			return;
+			return false;
 		}
 		while (res.next()) {
 			String name = res.getString(1);
-			System.out.println("res: " + res.getString(1));
-			if (name == null || name.equals("")) {
+			if (name == null || name.equals("") || name.equals("null")) {
+				System.out.println("You have no previously created characters");
+				return false;
 			} else {
-				System.out.println(res.getString(1));
+				System.out.println(name);
 			}
 		}
+		return true;
 	}
 }

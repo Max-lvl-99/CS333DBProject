@@ -22,18 +22,19 @@ public class Game {
 		con = ConnectURL.makeConnection();
 		scan = new Scanner(System.in);
 
-		String name = scan.next();
+		// String name = scan.next();
 		// character = new Player(c);
 		Scenario checkpoint = new Scenario(0, 1);
 		current = checkpoint;
 
 		main();
-
 	}
 
 	public void main() throws SQLException {
 		while (true) {
 			act = getActions();
+			System.out.println("l: go left; r: go right; f: go forward; "
+					+ "i: view inventory; d: delete from inventory; h: help");
 			System.out.println("Your choices are: " + stringActions());
 			String c = scan.next();
 			handleActions(c);
@@ -109,6 +110,12 @@ public class Game {
 		case "h":
 			System.out.println("This is the help function");
 			break;
+		case "i":
+			// TODO: Ryan make the inventory show up here
+		case "d":
+			// TODO: Ryan allow the user to delete item(s) here
+		case "u":
+			// TODO: Next Milestone -- Use items
 		case "0":
 			System.out.println(current.interactibles.get(0).type);
 			if (current.interactibles.get(0).type == 0) {

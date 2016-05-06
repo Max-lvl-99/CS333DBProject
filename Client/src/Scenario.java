@@ -87,9 +87,12 @@ public class Scenario {
 			actions.add('b');
 		if (forward)
 			actions.add('f');
+		actions.add('i');
+		actions.add('d');
+		// actions.add('u'); next milestone
 		int count = 0;
 		for (Interactible c : interactibles) {
-			actions.add((char) (count+48));
+			actions.add((char) (count + 48));
 			count++;
 		}
 		return actions;
@@ -97,17 +100,16 @@ public class Scenario {
 
 	public void generateInteractible() throws SQLException {
 		CallableStatement cs;
-		int a = (int) (Math.random()*2);
-		if(a == 0){
+		int a = (int) (Math.random() * 2);
+		if (a == 0) {
 			cs = con.prepareCall("{call count_Items(?)}");
-		}
-		else {
-			cs = con.prepareCall("{call count_Weapon(?)}");		
+		} else {
+			cs = con.prepareCall("{call count_Weapon(?)}");
 		}
 		cs.registerOutParameter(1, Types.INTEGER);
-        cs.execute();
-        int b = cs.getInt(1);
-		int c = (int) ((Math.random()*b)+1);
-		interactibles.add(new Interactible(a,c));
+		cs.execute();
+		int b = cs.getInt(1);
+		int c = (int) ((Math.random() * b) + 1);
+		interactibles.add(new Interactible(a, c));
 	}
 }
