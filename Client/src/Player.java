@@ -12,7 +12,7 @@ public class Player {
 	private int floor;
 	private int room;
 	private int chID;
-	private int inID;
+	static int inID;
 	private float dmgMult;
 	private float hpMult;
 	private String weaponName;
@@ -44,9 +44,9 @@ public class Player {
 			this.inID = Integer.parseInt(res.getString(7));
 		}
 		
-		sql = "{call InsertIntoInventory (this.inID, 1)}";
-		stmt = con.prepareCall(sql);
-		stmt.executeQuery();
+//		sql = "{call InsertIntoInventory (this.inID, 1)}";
+//		stmt = con.prepareCall(sql);
+//		stmt.executeQuery();
 		
 //		sql = "{call InsertIntoInventory (inID, 2)}";
 //		stmt = con.prepareCall(sql);
