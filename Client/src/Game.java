@@ -166,6 +166,9 @@ public class Game {
 				current = checkpoint;
 			}
 			break;
+		case "e":
+			scan.close();
+			System.exit(0);
 		}
 	}
 

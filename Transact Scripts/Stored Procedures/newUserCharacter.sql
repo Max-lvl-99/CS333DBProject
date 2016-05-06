@@ -11,7 +11,7 @@ Begin
 End
 --Insert new user character into User_Character table
 Declare @newChID int;
-Insert Into Character (ChName, Base_HP) Values(@UCName, 10);
+Insert Into Character (ChName, Base_HP) Values(@UCName, 100);
 Select @newChID = Max(ChID) from Character;
 Insert Into User_Character (ChID)
 	Values (@newChID);
@@ -19,6 +19,7 @@ Insert Into User_Character (ChID)
 Declare @InID int;
 Select @InID = InID From User_Character Where ChID = @newChID;
 Insert Into ChToInv (InID, ChID) Values(@InID, @newChID);
+Insert into Has (ChId, WeID) Values(@newChID, 1);
 --Add new user chacter to this username
 Insert Into UsernameToUserCharacters (Username, ChID)
 	Values (@Username, @newChID);
