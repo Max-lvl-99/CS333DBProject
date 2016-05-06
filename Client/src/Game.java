@@ -17,8 +17,9 @@ public class Game {
 	// Needs to be referenced to access CD
 	Connection con;
 
-	public Game(Player character) throws SQLException {
+	public Game(Player c) throws SQLException {
 		// Make the connection to SQL Server for queries.
+		character = c;
 		con = ConnectURL.makeConnection();
 		scan = new Scanner(System.in);
 
@@ -86,6 +87,44 @@ public class Game {
 		case "h":
 			helpString();
 			break;
+		case "0":
+			if (current.interactibles.get(0).type == 0) {
+				character.insertIntoInventory(current.interactibles.get(0).id, "I");
+			} else {
+				character.insertIntoInventory(current.interactibles.get(0).id, "W");
+			}
+			current.interactibles.remove(0);
+			break;
+		case "1":
+			if (current.interactibles.get(1).type == 0) {
+				character.insertIntoInventory(current.interactibles.get(1).id, "I");
+			} else {
+				character.insertIntoInventory(current.interactibles.get(1).id, "W");
+			}
+			current.interactibles.remove(1);
+			break;
+		case "2":
+			if (current.interactibles.get(2).type == 0) {
+				character.insertIntoInventory(current.interactibles.get(2).id, "I");
+			} else {
+				character.insertIntoInventory(current.interactibles.get(2).id, "W");
+			}
+			current.interactibles.remove(2);
+			break;
+		case "3":
+			new Battle(character, current.enemies.get(0));
+			if(character.getHP()<0){
+				System.out.println("Starting from checkpoint.");
+				current = checkpoint;
+			}
+			break;
+		case "4":
+			new Battle(character, current.enemies.get(1));
+			if(character.getHP()<0){
+				System.out.println("Starting from checkpoint.");
+				current = checkpoint;
+			}
+			break;
 		}
 	}
 
@@ -117,9 +156,7 @@ public class Game {
 		case "u":
 			// TODO: Next Milestone -- Use items
 		case "0":
-			System.out.println(current.interactibles.get(0).type);
 			if (current.interactibles.get(0).type == 0) {
-				System.out.println("I");
 				cs = con.prepareCall("{call get_Item_Name(?,?)}");
 			} else {
 				cs = con.prepareCall("{call get_Weapon_Name(?,?)}");
@@ -131,9 +168,7 @@ public class Game {
 			System.out.println(b);
 			break;
 		case "1":
-			System.out.println(current.interactibles.get(1).type);
 			if (current.interactibles.get(1).type == 0) {
-				System.out.println("I");
 				cs = con.prepareCall("{call get_Item_Name(?,?)}");
 			} else {
 				cs = con.prepareCall("{call get_Weapon_Name(?,?)}");
@@ -145,9 +180,7 @@ public class Game {
 			System.out.println(b);
 			break;
 		case "2":
-			System.out.println(current.interactibles.get(2).type);
 			if (current.interactibles.get(2).type == 0) {
-				System.out.println("I");
 				cs = con.prepareCall("{call get_Item_Name(?,?)}");
 			} else {
 				cs = con.prepareCall("{call get_Weapon_Name(?,?)}");
@@ -157,6 +190,13 @@ public class Game {
 			cs.execute();
 			b = cs.getString(2);
 			System.out.println(b);
+			break;
+		
+		case "3":
+			System.out.println(current.enemies.get(0).name);
+			break;
+		case "4":
+			System.out.println(current.enemies.get(1).name);
 			break;
 		}
 	}
