@@ -46,6 +46,7 @@ public class Player {
 			this.inID = Integer.parseInt(res.getString(7));
 		}
 		
+
 		sql = "{call InsertIntoInventory (?, ?, ?)}";
 		
 		stmt = con.prepareCall(sql);
