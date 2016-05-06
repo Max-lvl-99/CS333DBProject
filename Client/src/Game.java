@@ -125,7 +125,9 @@ public class Game {
 			str = new StringBuilder();
 			while (res.next()) {
 				str.append(res.getString(1));
-				str.append(":    ");
+				str.append(" (");
+				str.append(res.getString(2));
+				str.append("):    ");
 			}
 			System.out.println(str.toString());
 			break;
