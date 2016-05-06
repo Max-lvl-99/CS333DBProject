@@ -43,6 +43,16 @@ public class Player {
 			this.chID = Integer.parseInt(res.getString(6));
 			this.inID = Integer.parseInt(res.getString(7));
 		}
+		
+		sql = "{call InsertIntoInventory (this.inID, 1)}";
+		stmt = con.prepareCall(sql);
+		stmt.executeQuery();
+		
+//		sql = "{call InsertIntoInventory (inID, 2)}";
+//		stmt = con.prepareCall(sql);
+//		stmt.executeQuery();
+		
+		
 		sql = "{call getMultipliersExp (?)}";
 		stmt = con.prepareCall(sql);
 		stmt.setString(1, Float.toString(this.exp));
