@@ -19,6 +19,8 @@ public class Game {
 	Connection con;
 	// CallableStatement is used for stored procedures
 	CallableStatement stmt;
+	boolean showExplanations = true;
+	StringBuilder explanations = new StringBuilder();
 
 	public Game(Player c) throws SQLException {
 		// Make the connection to SQL Server for queries.
@@ -37,9 +39,15 @@ public class Game {
 	public void main() throws SQLException {
 		while (true) {
 			act = getActions();
-			System.out.println("l: go left; r: go right; f: go forward; "
-					+ "i: view inventory; d: delete from inventory; h: help; e: exit");
-			System.out.println("Your choices are: " + stringActions());
+			System.out.println("Health: " + this.character.getHP() + "/" + this.character.getMaxHP() + " Floor: "
+					+ character.getFloor() + " Room: " + character.getRoom());
+			// System.out.println("l: go left; r: go right; f: go forward; "
+			// + "i: view inventory; d: delete from inventory; h: help; e:
+			// exit");
+			String choices = stringActions();
+			if (showExplanations)
+				System.out.println(explanations.toString());
+			System.out.println("Your choices are: " + choices);
 			String c = scan.next();
 			handleActions(c);
 		}
@@ -54,13 +62,62 @@ public class Game {
 
 	public String stringActions() {
 		StringBuilder sb = new StringBuilder();
+		explanations = new StringBuilder();
 		for (Character c : act) {
 			sb.append(c);
+			explanations = addExplanation(explanations, c);
 			sb.append(' ');
-		}
+		} // Make the option to show or hide explanations last
+		sb.append('s');
+		explanations = addExplanation(explanations, 's');
+		sb.append(' ');
 		return sb.toString();
 	}
 
+	/**
+	 * Adds the appropriate explanation for the character the user can hit for
+	 * this round.
+	 * 
+	 * @param explanations2
+	 * @param c
+	 */
+	private StringBuilder addExplanation(StringBuilder ex, Character c) {
+		// System.out.println("in addExplanations c: " + c + " ex: " + ex);
+		if (c.equals('f'))
+			ex.append("Press f then hit enter to move forward to the next room.  ");
+		else if (c.equals('s'))
+			ex.append("Press s then hit enter to hide these explanations.  ");
+		else if (c.equals('l'))
+			ex.append("Press l then hit enter to move to the room that's left of this room.  ");
+		else if (c.equals('r'))
+			ex.append("Press r then hit enter to move to the room that's right of this room.  ");
+		else if (c.equals('b'))
+			ex.append("Press b then hit enter to go back to the room you came from. ");
+		else if (c.equals('h'))
+			ex.append("Press h then hit enter to see the help screen.  ");
+		else if (c.equals('i'))
+			ex.append("Press i then hit enter to see your inventory of items and weapons.  ");
+		else if (c.equals('d'))
+			ex.append("Press d then hit enter to delete items from your inventory.  ");
+		else if (c.equals('0'))
+			ex.append("Press 0 then hit enter to put an item you found into your inventory.  ");
+		else if (c.equals('1'))
+			ex.append("Press 1 then hit enter to put an item you found into your inventory.  ");
+		else if (c.equals('2'))
+			ex.append("Press 2 then hit enter to put an item you found into your inventory.  ");
+		else if (c.equals('3'))
+			ex.append("Press 3 then hit enter to battle an enemy!  ");
+		else if (c.equals('4'))
+			ex.append("Press 4 then hit enter to battle an enemy!  ");
+		return ex;
+	}
+
+	/**
+	 * Handles when the user enters a character and presses the enter key.
+	 * 
+	 * @param c
+	 * @throws SQLException
+	 */
 	public void handleActions(String c) throws SQLException {
 		ResultSet res;
 		StringBuilder str;
@@ -92,6 +149,9 @@ public class Game {
 			break;
 		case "h":
 			helpString();
+			break;
+		case "s":
+			showExplanations = !showExplanations;
 			break;
 		case "i":
 			sql = "{call [Display Inventory] (?)}";
@@ -184,6 +244,11 @@ public class Game {
 		}
 	}
 
+	/**
+	 * Used to show help for specific commands.
+	 * 
+	 * @throws SQLException
+	 */
 	public void helpString() throws SQLException {
 		System.out.println("Which command do you need information on?");
 		String c = scan.next();
@@ -208,42 +273,6 @@ public class Game {
 		case "h":
 			System.out.println("This is the help function");
 			break;
-		// case "i":
-		//
-		// sql = "{call [Display Inventory] (?)}";
-		// stmt = con.prepareCall(sql);
-		// stmt.setInt(1, Player.inID);
-		// res = stmt.executeQuery();
-		// str = new StringBuilder();
-		// while (res.next()) {
-		// str.append(res.getString(1));
-		// str.append(" (");
-		// str.append(res.getString(2));
-		// str.append("): ");
-		// }
-		// System.out.println(str.toString());
-		// break;
-		// // DONE: Ryan make the inventory show up here
-		// case "d":
-		// sql = "{call [UpdateItemInInventory] (?,?,?)}";
-		// stmt = con.prepareCall(sql);
-		// stmt.setInt(1, Player.inID);
-		//
-		// System.out.println("Insert item ID to update");
-		// int i = scan.nextInt();
-		// stmt.setInt(2, i);
-		//
-		// System.out.println("Insert amount to update (negative for removal)");
-		// i = scan.nextInt();
-		// stmt.setInt(3, i);
-		// khlhljhljhlk
-		// stmt.executeUpdate();
-		//
-		// System.out.println(i + " items added!");
-		// break;
-		// // DONE: Ryan allow the user to delete item(s) here
-		// case "u":
-		// // TODO: Next Milestone -- Use items
 		case "0":
 			if (current.interactibles.get(0).type == 0) {
 				cs = con.prepareCall("{call get_Item_Name(?,?)}");

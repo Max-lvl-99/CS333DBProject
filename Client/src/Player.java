@@ -9,7 +9,7 @@ public class Player {
 	private float baseHP;
 	// maxHP is calculated client-side by multiplying baseHP and hpMult
 	private float maxHP;
-	private float actualHP;
+	// private float actualHP;
 	private float exp;
 	private int floor;
 	private int room;
@@ -37,7 +37,7 @@ public class Player {
 		// 1: Actual_hp 2: Base_HP 3: Exp 4: Floor 5: Room
 		// 6: ChID 7: InID
 		while (res.next()) {
-			this.actualHP = Float.parseFloat(res.getString(1));
+			// this.actualHP = Float.parseFloat(res.getString(1));
 			this.baseHP = Float.parseFloat(res.getString(2));
 			this.exp = Float.parseFloat(res.getString(3));
 			this.floor = Integer.parseInt(res.getString(4));
@@ -140,5 +140,29 @@ public class Player {
 		}
 		stmt.close();
 		return items;
+	}
+
+	public float getMaxHP() {
+		return this.maxHP;
+	}
+
+	// public float getActualHP() {
+	// return this.actualHP;
+	// }
+
+	public int getFloor() {
+		return this.floor;
+	}
+
+	public void setFloor(int fl) {
+		this.floor = fl;
+	}
+
+	public int getRoom() {
+		return this.room;
+	}
+
+	public void setRoom(int rm) {
+		this.room = rm;
 	}
 }
