@@ -15,7 +15,9 @@ public class Scenario {
 	Scenario backScen;
 	int elevator;
 	int numberofEnemies;
+	int f;
 	ArrayList<Interactible> interactibles;
+	ArrayList<Enemy> enemies;
 	Connection con;
 
 	public Scenario(int progress, int floor, char action, Scenario prevScen) throws SQLException {
@@ -59,8 +61,13 @@ public class Scenario {
 			}
 			break;
 		}
+		f = floor;
 
 		numberofEnemies = (int) (Math.random() * 3);
+		enemies = new ArrayList<Enemy>();
+		for(int i = 0; i < numberofEnemies; i++) {
+			generateEnemies();
+		}
 		interactibles = new ArrayList<Interactible>();
 		int numofInteracts = (int) (Math.random() * 4);
 		for (int i = 0; i < numofInteracts; i++) {
@@ -75,6 +82,7 @@ public class Scenario {
 		right = true;
 		numberofEnemies = 0;
 		interactibles = new ArrayList<Interactible>();
+		enemies = new ArrayList<Enemy>();
 	}
 
 	public ArrayList<Character> getActions() {
@@ -96,6 +104,11 @@ public class Scenario {
 			actions.add((char) (count + 48));
 			count++;
 		}
+		count = 0;
+		for(Enemy b: enemies){
+			actions.add((char) (count+51));
+			count++;
+		}
 		return actions;
 	}
 
@@ -112,5 +125,14 @@ public class Scenario {
 		int b = cs.getInt(1);
 		int c = (int) ((Math.random() * b) + 1);
 		interactibles.add(new Interactible(a, c));
+	}
+	
+	public void generateEnemies() throws SQLException {
+		CallableStatement cs;
+		cs = con.prepareCall("{call getanEnemy(?)}");
+		cs.registerOutParameter(1, Types.VARCHAR);
+		cs.execute();
+		String b = cs.getString(1);
+		enemies.add(new Enemy(f, b));
 	}
 }
