@@ -224,7 +224,7 @@ public class Game {
 		// System.out.println("Insert amount to update (negative for removal)");
 		// i = scan.nextInt();
 		// stmt.setInt(3, i);
-		//
+		// khlhljhljhlk
 		// stmt.executeUpdate();
 		//
 		// System.out.println(i + " items added!");
