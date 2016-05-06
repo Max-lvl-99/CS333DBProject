@@ -1,6 +1,7 @@
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ public class Game {
 	ArrayList<Character> act;
 	// Needs to be referenced to access CD
 	Connection con;
+	// CallableStatement is used for stored procedures
+	CallableStatement stmt;
 
 	public Game(Player character) throws SQLException {
 		// Make the connection to SQL Server for queries.
@@ -94,6 +97,9 @@ public class Game {
 		String c = scan.next();
 		CallableStatement cs;
 		String b;
+		ResultSet res;
+		StringBuilder str;
+		String sql;
 		switch (c) {
 		case "f":
 			System.out.println("Go forward");
@@ -111,9 +117,37 @@ public class Game {
 			System.out.println("This is the help function");
 			break;
 		case "i":
-			// TODO: Ryan make the inventory show up here
+			
+			sql = "{call [Display Inventory] (?)}";
+			stmt = con.prepareCall(sql);
+			stmt.setInt(1, Player.inID);
+			res = stmt.executeQuery();
+			str = new StringBuilder();
+			while (res.next()) {
+				str.append(res.getString(1));
+				str.append(":    ");
+			}
+			System.out.println(str.toString());
+			break;
+			// DONE: Ryan make the inventory show up here
 		case "d":
-			// TODO: Ryan allow the user to delete item(s) here
+			sql = "{call [UpdateItemInInventory] (?,?,?)}";
+			stmt = con.prepareCall(sql);
+			stmt.setInt(1, Player.inID);
+			
+			System.out.println("Insert item ID to update");
+			int i = scan.nextInt();
+			stmt.setInt(2, i);
+
+			System.out.println("Insert amount to update (negative for removal)");
+			i = scan.nextInt();
+			stmt.setInt(3, i);
+			
+			stmt.executeUpdate();
+
+			System.out.println(i + " items added!");
+			break;
+			// DONE: Ryan allow the user to delete item(s) here
 		case "u":
 			// TODO: Next Milestone -- Use items
 		case "0":
