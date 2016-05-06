@@ -44,7 +44,6 @@ public class Battle {
 			if(c == "f"){
 				b = 2;
 				j = false;
-				break;
 			}
 			else if(c.equals("a")){
 				handleWeapons();
