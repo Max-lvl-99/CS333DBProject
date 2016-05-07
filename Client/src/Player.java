@@ -46,13 +46,13 @@ public class Player {
 			this.inID = Integer.parseInt(res.getString(7));
 		}
 
-		sql = "{call InsertIntoInventory (?, ?, ?)}";
-
-		stmt = con.prepareCall(sql);
-		stmt.setInt(1, inID);
-		stmt.setInt(2, 1);
-		stmt.setNString(3, "I");
-		stmt.execute();
+		// sql = "{call InsertIntoInventory (?, ?, ?)}";
+		//
+		// stmt = con.prepareCall(sql);
+		// stmt.setInt(1, inID);
+		// stmt.setInt(2, 1);
+		// stmt.setNString(3, "I");
+		// stmt.execute();
 
 		// sql = "{call InsertIntoInventory (inID, 2)}";
 		// stmt = con.prepareCall(sql);
@@ -164,5 +164,9 @@ public class Player {
 
 	public void setRoom(int rm) {
 		this.room = rm;
+	}
+
+	public int getChID() {
+		return this.chID;
 	}
 }

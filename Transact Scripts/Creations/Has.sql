@@ -10,7 +10,8 @@ GO
 
 CREATE TABLE [dbo].[Has](
 	[ChId] [int] NOT NULL,
-	[WeID] [int] NOT NULL
+	[WeID] [int] NOT NULL,
+	Number int default 1
 ) ON [PRIMARY]
 
 GO

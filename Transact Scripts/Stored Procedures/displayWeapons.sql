@@ -1,9 +1,8 @@
 
 alter proc displayWeapons
-	(@InID int)
+	(@ChID int)
 AS
-	SELECT WeName AS Name, num
-	FROM Item, Inventory, Weapon
-	Where Weapon.WeID = Item.ItID and Inventory.ItID = Item.ItID AND Inventory.InID = @InID And 
-	Type = 'W';
+	SELECT WeName AS Name, num As Number
+	FROM Has as H, Weapon As W
+	Where W.WeID = H.ChId and H.ChId = @ChID;
 GO
