@@ -10,13 +10,14 @@ GO
 
 SET ANSI_PADDING ON
 GO
-
+--drop table Weapon;
 CREATE TABLE [dbo].[Weapon](
 	[WeID] [int] IDENTITY(1,1) NOT NULL,
 	[WeName] [varchar](20) NOT NULL,
 	[Attack_Name] [varchar](30) NOT NULL,
-	[Weapon_Poison] [int] NULL,
+	[Weapon_Poison] [int] default NULL,
 	[Base_Damage] [real] NOT NULL,
+	[WeaponType] [varchar](12) default NULL
 PRIMARY KEY CLUSTERED 
 (
 	[WeID] ASC
@@ -28,8 +29,10 @@ GO
 SET ANSI_PADDING OFF
 GO
 
-ALTER TABLE [dbo].[Weapon]  WITH CHECK ADD FOREIGN KEY([Weapon_Poison])
-REFERENCES [dbo].[Item] ([ItID])
+ALTER TABLE [dbo].Weapon  WITH CHECK ADD FOREIGN KEY([WeaponType])
+REFERENCES [dbo].[WeaponType] ([WeaponType])
+ON UPDATE set default
+ON DELETE set default
 GO
 
 ALTER TABLE [dbo].[Weapon]  WITH CHECK ADD  CONSTRAINT [We_dmg_pos] CHECK  (([Base_Damage]>=(0)))

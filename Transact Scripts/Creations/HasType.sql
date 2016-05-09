@@ -23,8 +23,8 @@ GO
 
 ALTER TABLE [dbo].[HasType]  WITH CHECK ADD FOREIGN KEY([WeaponType])
 REFERENCES [dbo].[WeaponType] ([WeaponType])
-ON UPDATE CASCADE
-ON DELETE CASCADE
+ON UPDATE set null
+ON DELETE set null
 GO
 
 ALTER TABLE [dbo].[HasType]  WITH CHECK ADD FOREIGN KEY([WeID])

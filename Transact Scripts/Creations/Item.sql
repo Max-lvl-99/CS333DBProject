@@ -1,7 +1,7 @@
 Use MushVsGrump;
 GO
-IF OBJECT_ID('dbo.Item', 'U') IS NOT NULL 
-	DROP TABLE Item;
+--IF OBJECT_ID('dbo.Item', 'U') IS NOT NULL 
+	--DROP TABLE Item;
 CREATE TABLE Item(
 	ItID int Identity(1,1),
 	ItName varchar(40),

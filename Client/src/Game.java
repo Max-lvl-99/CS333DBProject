@@ -19,7 +19,7 @@ public class Game {
 	Connection con;
 	// CallableStatement is used for stored procedures
 	CallableStatement stmt;
-	boolean showExplanations = true;
+	boolean showExplanations = false;
 	StringBuilder explanations = new StringBuilder();
 
 	public Game(Player c) throws SQLException {
@@ -45,8 +45,7 @@ public class Game {
 			// + "i: view inventory; d: delete from inventory; h: help; e:
 			// exit");
 			String choices = stringActions();
-			if (showExplanations)
-				System.out.println(explanations.toString());
+			System.out.println(explanations.toString());
 			System.out.println("Your choices are: " + choices);
 			String c = scan.next();
 			handleActions(c);
@@ -63,11 +62,21 @@ public class Game {
 	public String stringActions() {
 		StringBuilder sb = new StringBuilder();
 		explanations = new StringBuilder();
-		for (Character c : act) {
-			sb.append(c);
-			explanations = addExplanation(explanations, c);
-			sb.append(' ');
-		} // Make the option to show or hide explanations last
+		if (showExplanations) {
+			for (Character c : act) {
+				sb.append(c);
+				explanations = addExplanation(explanations, c);
+				sb.append(' ');
+			}
+		} else {
+			for (Character c : act) {
+				sb.append(c);
+				// explanations = addExplanation(explanations, c);
+				sb.append(' ');
+			}
+		}
+
+		// Make the option to show or hide explanations last
 		sb.append('s');
 		explanations = addExplanation(explanations, 's');
 		sb.append(' ');
@@ -86,7 +95,11 @@ public class Game {
 		if (c.equals('f'))
 			ex.append("Press f then hit enter to move forward to the next room.  ");
 		else if (c.equals('s'))
-			ex.append("Press s then hit enter to hide these explanations.  ");
+			if (showExplanations) {
+				ex.append("Press s then hit enter to hide these explanations.  ");
+			} else {
+				ex.append("Press s then hit enter to show the explanations.  ");
+			}
 		else if (c.equals('l'))
 			ex.append("Press l then hit enter to move to the room that's left of this room.  ");
 		else if (c.equals('r'))

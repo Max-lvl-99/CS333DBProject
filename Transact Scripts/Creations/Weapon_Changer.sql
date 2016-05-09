@@ -10,7 +10,7 @@ GO
 
 SET ANSI_PADDING ON
 GO
-
+--drop table Weapon_Changer;
 CREATE TABLE [dbo].[Weapon_Changer](
 	[ItID] [int] NOT NULL,
 	[Amt_Changed] [float] NOT NULL,

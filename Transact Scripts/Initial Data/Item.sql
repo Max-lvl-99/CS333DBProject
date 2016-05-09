@@ -2,7 +2,7 @@ Use MushVsGrump;
 GO
 --If we need to really reset the table delete rows and reset identity seed
 --before inserting again.
-Delete From Item;
+--Delete From Item;
 DBCC CHECKIDENT ('Item', RESEED, 0);
 
 INSERT INTO Item (ItName, ItDesc)
