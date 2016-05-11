@@ -96,6 +96,7 @@ public class Scenario {
 		if (forward)
 			actions.add('f');
 		actions.add('i');
+		actions.add('p');
 		actions.add('d');
 		// actions.add('u'); next milestone
 		actions.add('e');

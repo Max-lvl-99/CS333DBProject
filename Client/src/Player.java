@@ -13,7 +13,7 @@ public class Player {
 	private float exp;
 	private int floor;
 	private int room;
-	private int chID;
+	int chID;
 	static int inID;
 	private float dmgMult;
 	private float hpMult;
@@ -74,10 +74,9 @@ public class Player {
 	}
 
 	public void insertIntoInventory(int id, String type) throws SQLException {
-		CallableStatement cs = con.prepareCall("{call InsertIntoInventory (?, ?, ?)}");
+		CallableStatement cs = con.prepareCall("{call InsertIntoInventory (?, ?)}");
 		cs.setInt(1, inID);
 		cs.setInt(2, id);
-		cs.setString(3, type);
 		cs.execute();
 	}
 

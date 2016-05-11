@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Game {
@@ -94,12 +95,13 @@ public class Game {
 		// System.out.println("in addExplanations c: " + c + " ex: " + ex);
 		if (c.equals('f'))
 			ex.append("Press f then hit enter to move forward to the next room.  ");
+		else if (c.equals('p'))
+			ex.append("Press p to poison a weapon.  ");
 		else if (c.equals('s'))
-			if (showExplanations) {
+			if (showExplanations)
 				ex.append("Press s then hit enter to hide these explanations.  ");
-			} else {
+			else
 				ex.append("Press s then hit enter to show the explanations.  ");
-			}
 		else if (c.equals('l'))
 			ex.append("Press l then hit enter to move to the room that's left of this room.  ");
 		else if (c.equals('r'))
@@ -108,6 +110,8 @@ public class Game {
 			ex.append("Press b then hit enter to go back to the room you came from. ");
 		else if (c.equals('h'))
 			ex.append("Press h then hit enter to see the help screen.  ");
+		else if (c.equals('e'))
+			ex.append("Press e then hit enter to exit the game.  ");
 		else if (c.equals('i'))
 			ex.append("Press i then hit enter to see your inventory of items and weapons.  ");
 		else if (c.equals('d'))
@@ -167,30 +171,8 @@ public class Game {
 			showExplanations = !showExplanations;
 			break;
 		case "i":
-			sql = "{call [Display Inventory] (?)}";
-			stmt = con.prepareCall(sql);
-			stmt.setInt(1, Player.inID);
-			res = stmt.executeQuery();
-			str = new StringBuilder();
-			while (res.next()) {
-				str.append(res.getString(1));
-				str.append(" (");
-				str.append(res.getString(2));
-				str.append("); ");
-			}
-			System.out.println(str.toString());
-			sql = "{call displayWeapons (?)}";
-			stmt = con.prepareCall(sql);
-			stmt.setInt(1, this.character.getChID());
-			res = stmt.executeQuery();
-			str = new StringBuilder();
-			while (res.next()) {
-				str.append(res.getString(1));
-				str.append(" (");
-				str.append(res.getString(2));
-				str.append("); ");
-			}
-			System.out.println(str.toString());
+			displayInventory();
+			displayWeapons(null);
 			break;
 		// DONE: Ryan make the inventory show up here
 		case "d":
@@ -213,6 +195,9 @@ public class Game {
 		// DONE: Ryan allow the user to delete item(s) here
 		case "u":
 			// TODO: Next Milestone -- Use items
+		case "p":
+			poisonWeapon();
+			break;
 		case "0":
 			if (current.interactibles.get(0).type == 0) {
 				character.insertIntoInventory(current.interactibles.get(0).id, "I");
@@ -253,8 +238,125 @@ public class Game {
 			break;
 		case "e":
 			scan.close();
+			System.out.println("Quitting game");
 			System.exit(0);
 		}
+	}
+
+	private void displayInventory() throws SQLException {
+		String sql = "{call [Display Inventory] (?)}";
+		stmt = con.prepareCall(sql);
+		stmt.setInt(1, Player.inID);
+		ResultSet res = stmt.executeQuery();
+		StringBuilder str = new StringBuilder();
+		while (res.next()) {
+			str.append(res.getString(1));
+			str.append(" (");
+			str.append(res.getString(2));
+			str.append("); ");
+		}
+		System.out.println(str.toString());
+	}
+
+	private HashMap<Integer, Integer> displayPoisons(HashMap<Integer, Integer> displayNumToItID) throws SQLException {
+		String sql = "{call displayPoisons (?)}";
+		stmt = con.prepareCall(sql);
+		stmt.setInt(1, Player.inID);
+		ResultSet res = stmt.executeQuery();
+		StringBuilder str = new StringBuilder();
+		int i = 1;
+		while (res.next()) {
+			displayNumToItID.put((Integer) i, Integer.parseInt(res.getString(5)));
+			str.append(i + ".) " + res.getString(1));
+			str.append(" (num: ");
+			str.append(res.getString(2));
+			str.append(") ");
+			str.append("Damage increase (vs. no poison): x1" + res.getString(3).substring(1) + " for weapons of type "
+					+ res.getString(4) + ".  ");
+			i++;
+		}
+		System.out.println(str.toString());
+		return displayNumToItID;
+	}
+
+	private HashMap<Integer, Integer> displayWeapons(HashMap<Integer, Integer> displayNumToWeID) throws SQLException {
+		String sql = "{call displayWeapons (?)}";
+		stmt = con.prepareCall(sql);
+		stmt.setInt(1, this.character.getChID());
+		ResultSet res = stmt.executeQuery();
+		StringBuilder str = new StringBuilder();
+		if (displayNumToWeID == null) {
+			while (res.next()) {
+				str.append(res.getString(1));
+				// str.append(". poison: ");
+				// String poison = res.getString(2);
+				// if (poison == null)
+				// str.append("none. ");
+				// else
+				// str.append(res.getString(2));
+				// str.append(", x1" + res.getString(4).substring(1) + ". ");
+			}
+		} else {
+			int i = 1;
+			while (res.next()) {
+				displayNumToWeID.put(i, Integer.parseInt(res.getString(3)));
+				str.append(i + ".) " + res.getString(1));
+				// str.append(". poison: ");
+				// String poison = res.getString(2);
+				// if (poison == null)
+				// str.append("none. ");
+				// else {
+				// str.append(res.getString(2) + ", ");
+				// str.append(" x1" + res.getString(4).substring(1) + ". ");
+				// }
+				i++;
+			}
+		}
+		System.out.println(str.toString());
+		return displayNumToWeID;
+	}
+
+	private void poisonWeapon() throws SQLException {
+		HashMap<Integer, Integer> displayNumToItID = new HashMap<Integer, Integer>();
+		displayNumToItID = displayPoisons(displayNumToItID);
+		System.out.println("Enter the number that corresponds to the poison you want to use: (e to exit)");
+		String next = scan.next();
+		if (next.equals("e"))
+			return;
+		Integer pNum = Integer.parseInt(next);
+		if (!displayNumToItID.containsKey(pNum)) {
+			System.out.println("Error: That number does not correspond to a poison");
+			return;
+		}
+		HashMap<Integer, Integer> displayNumToWeID = new HashMap<Integer, Integer>();
+		System.out.println("Okay.  Now, here are you weapons: ");
+		displayNumToWeID = displayWeapons(displayNumToWeID);
+		System.out.println("Enter the number that corresponds to the weapon you want to poison: (e to exit) ");
+		next = scan.next();
+		if (next.equals("e"))
+			return;
+		Integer wNum = Integer.parseInt(next);
+		if (!displayNumToWeID.containsKey(wNum)) {
+			System.out.println("Error: That number does not correspond to a weapon");
+			return;
+		}
+		applyPoison(displayNumToItID.get(pNum), displayNumToWeID.get(wNum));
+	}
+
+	private void applyPoison(Integer ItID, Integer WeID) throws SQLException {
+		String sql = "{? = call applyPoison (?, ?, ?, ?)}";
+		stmt = con.prepareCall(sql);
+		stmt.setInt(2, character.chID);
+		stmt.setInt(3, ItID);
+		stmt.setInt(4, WeID);
+		stmt.setInt(5, character.inID);
+		stmt.registerOutParameter(1, Types.INTEGER);
+		boolean hadResults = stmt.execute();
+		int result = stmt.getInt(1);
+		if (result == 1)
+			System.out.println("Weapon has been poisoned!");
+		else
+			System.out.println("Weapon poison cannot poison this type of weapon");
 	}
 
 	/**

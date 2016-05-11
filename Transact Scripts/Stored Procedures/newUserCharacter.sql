@@ -11,7 +11,7 @@ Begin
 End
 --Insert new user character into User_Character table
 Declare @newChID int;
-Insert Into Character (ChName, Base_HP) Values(@UCName, 100);
+Insert Into Character (ChName, Base_HP, CurrentlyWielding) Values(@UCName, 100, 1);
 Select @newChID = Max(ChID) from Character;
 Insert Into User_Character (ChID)
 	Values (@newChID);
