@@ -4,7 +4,6 @@ GO
 --before inserting again.
 --Delete From Item;
 DBCC CHECKIDENT ('Item', RESEED, 0);
-
 INSERT INTO Item (ItName, ItDesc)
 	VALUES ('Weak Healing Potion', 
 	'This potion heals your health by 15% of your maximum possible health.');

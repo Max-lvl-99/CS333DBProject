@@ -8,10 +8,10 @@ alter PROCEDURE applyPoison
 	@InID int)
 AS
 	set nocount on;
-	if((select w.WeaponType from Has as h, Weapon as w where 
-		h.WeID = w.WeID and w.WeID = @WeID and h.ChId=@ChID) != 
-		(select wc.Weapon_Type from Weapon_Changer as wc, Inventory as i 
-		where i.ItID = wc.ItID and i.ItID = @ItID))
+	if((select distinct(wc.Weapon_Type) from Weapon_Changer as wc, Inventory as i 
+		where i.ItID = wc.ItID and i.ItID = @ItID and i.InID = @inID) !=
+		(select distinct(w.WeaponType) from Has as h, Weapon as w where 
+		h.WeID = w.WeID and w.WeID = @WeID and h.ChId=@ChID))
 	Begin
 		print('weapon poison not same type as weapon')
 		return 0;

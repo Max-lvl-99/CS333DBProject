@@ -3,6 +3,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -288,27 +289,28 @@ public class Game {
 		if (displayNumToWeID == null) {
 			while (res.next()) {
 				str.append(res.getString(1));
-				// str.append(". poison: ");
-				// String poison = res.getString(2);
-				// if (poison == null)
-				// str.append("none. ");
-				// else
-				// str.append(res.getString(2));
-				// str.append(", x1" + res.getString(4).substring(1) + ". ");
+				str.append(". poison: ");
+				String poison = res.getString(4);
+				if (poison == null)
+					str.append("none. ");
+				else {
+					str.append(poison);
+					str.append(", x1" + res.getString(5).substring(1) + " dmg. ");
+				}
 			}
 		} else {
 			int i = 1;
 			while (res.next()) {
 				displayNumToWeID.put(i, Integer.parseInt(res.getString(3)));
 				str.append(i + ".) " + res.getString(1));
-				// str.append(". poison: ");
-				// String poison = res.getString(2);
-				// if (poison == null)
-				// str.append("none. ");
-				// else {
-				// str.append(res.getString(2) + ", ");
-				// str.append(" x1" + res.getString(4).substring(1) + ". ");
-				// }
+				str.append(". poison: ");
+				String poison = res.getString(4);
+				if (poison == null)
+					str.append("none. ");
+				else {
+					str.append(poison);
+					str.append(", x1" + res.getString(5).substring(1) + " dmg. ");
+				}
 				i++;
 			}
 		}
