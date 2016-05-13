@@ -81,6 +81,14 @@ public class Player {
 		cs.execute();
 	}
 
+	public void insertIntoHas(int id, int chID2) throws SQLException {
+		System.out.println("WeID: " + id);
+		CallableStatement cs = con.prepareCall("{call InsertIntoHas (?, ?)}");
+		cs.setInt(1, chID2);
+		cs.setInt(2, id);
+		cs.execute();
+	}
+
 	public float getHP() throws SQLException {
 		CallableStatement cs = con.prepareCall("{call getHP(?, ?)}");
 		cs.setInt(1, chID);
@@ -110,13 +118,13 @@ public class Player {
 
 	public ArrayList<String> getWeapons() throws SQLException {
 		ArrayList<String> weapons = new ArrayList<String>();
-		stmt = con.prepareCall("{call getWeapons(?)}");
-		stmt.setInt(1, getInID());
+		stmt = con.prepareCall("{call displayWeapons(?)}");
+		stmt.setInt(1, this.chID);
 		boolean b = stmt.execute();
 		while (b) {
 			ResultSet rs = stmt.getResultSet();
 			while (rs.next()) {
-				weapons.add(rs.getString("WeName"));
+				weapons.add(rs.getString(1));
 			}
 			rs.close();
 			b = stmt.getMoreResults();
@@ -177,4 +185,5 @@ public class Player {
 	public void setInID(int inID) {
 		this.inID = inID;
 	}
+
 }

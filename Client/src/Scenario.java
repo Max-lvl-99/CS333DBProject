@@ -70,9 +70,9 @@ public class Scenario {
 		}
 		f = floor;
 		enemies = new ArrayList<Enemy>();
-		if(progress %10 == 0){
+		if (progress % 10 == 0) {
 			up = true;
-			numberofEnemies =1;
+			numberofEnemies = 1;
 			CallableStatement cs;
 			cs = con.prepareCall("{call getBoss(?, ?)}");
 			cs.setInt(1, f);
@@ -80,10 +80,9 @@ public class Scenario {
 			cs.execute();
 			String b = cs.getString(2);
 			enemies.add(new Enemy(f, b));
-		}
-		else {
+		} else {
 			numberofEnemies = (int) (Math.random() * 3);
-			for(int i = 0; i < numberofEnemies; i++) {
+			for (int i = 0; i < numberofEnemies; i++) {
 				generateEnemies();
 			}
 		}
@@ -94,18 +93,18 @@ public class Scenario {
 		}
 
 	}
-	public static Scenario create(int progress, int floor) throws SQLException{
+
+	public static Scenario create(int progress, int floor) throws SQLException {
 		ArrayList<Character> c = new ArrayList<Character>();
-		int i = (int) Math.random()*4;
+		int i = (int) Math.random() * 4;
 		c.add('l');
 		c.add('r');
 		c.add('f');
 		c.add('b');
-		if(progress>1){
-			return new Scenario(progress, floor, c.get(i), Scenario.create(progress-1, floor));
-		}
-		else{
-			return new Scenario(progress, floor, c.get(i), new Scenario(progress-1, floor));
+		if (progress > 1) {
+			return new Scenario(progress, floor, c.get(i), Scenario.create(progress - 1, floor));
+		} else {
+			return new Scenario(progress, floor, c.get(i), new Scenario(progress - 1, floor));
 		}
 	}
 
@@ -121,7 +120,7 @@ public class Scenario {
 
 	public ArrayList<Character> getActions() {
 		ArrayList<Character> actions = new ArrayList<Character>();
-		if (p % 10 == 0){
+		if (p % 10 == 0) {
 			actions.add('n');
 		}
 		if (left)
@@ -136,7 +135,7 @@ public class Scenario {
 		actions.add('p');
 		actions.add('d');
 		// actions.add('u'); next milestone
-		actions.add('z');	//save state of game
+		actions.add('z'); // save state of game
 		actions.add('e');
 		int count = 0;
 		for (Interactible c : interactibles) {
@@ -144,8 +143,8 @@ public class Scenario {
 			count++;
 		}
 		count = 0;
-		for(Enemy b: enemies){
-			actions.add((char) (count+51));
+		for (Enemy b : enemies) {
+			actions.add((char) (count + 51));
 			count++;
 		}
 		return actions;
@@ -165,7 +164,7 @@ public class Scenario {
 		int c = (int) ((Math.random() * b) + 1);
 		interactibles.add(new Interactible(a, c));
 	}
-	
+
 	public void generateEnemies() throws SQLException {
 		CallableStatement cs;
 		cs = con.prepareCall("{call getanEnemy(?)}");

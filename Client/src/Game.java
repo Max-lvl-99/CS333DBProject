@@ -250,7 +250,9 @@ public class Game {
 			if (current.interactibles.get(0).type == 0) {
 				character.insertIntoInventory(current.interactibles.get(0).id, "I");
 			} else {
-				character.insertIntoInventory(current.interactibles.get(0).id, "W");
+				character.insertIntoHas(current.interactibles.get(0).id, this.character.chID);
+				// character.insertIntoInventory(current.interactibles.get(0).id,
+				// "W");
 			}
 			current.interactibles.remove(0);
 			break;
@@ -258,7 +260,9 @@ public class Game {
 			if (current.interactibles.get(1).type == 0) {
 				character.insertIntoInventory(current.interactibles.get(1).id, "I");
 			} else {
-				character.insertIntoInventory(current.interactibles.get(1).id, "W");
+				character.insertIntoHas(current.interactibles.get(0).id, this.character.chID);
+				// character.insertIntoInventory(current.interactibles.get(1).id,
+				// "W");
 			}
 			current.interactibles.remove(1);
 			break;
@@ -266,7 +270,9 @@ public class Game {
 			if (current.interactibles.get(2).type == 0) {
 				character.insertIntoInventory(current.interactibles.get(2).id, "I");
 			} else {
-				character.insertIntoInventory(current.interactibles.get(2).id, "W");
+				character.insertIntoHas(current.interactibles.get(0).id, this.character.chID);
+				// character.insertIntoInventory(current.interactibles.get(2).id,
+				// "W");
 			}
 			current.interactibles.remove(2);
 			break;
