@@ -9,13 +9,18 @@ public class Scenario {
 	boolean right;
 	boolean forward;
 	boolean back;
+	boolean up;
+	boolean down;
 	Scenario leftScen;
 	Scenario rightScen;
 	Scenario forwardScen;
 	Scenario backScen;
-	int elevator;
+	Scenario upScen;
+	Scenario downScen;
+	char prevDir;
 	int numberofEnemies;
 	int f;
+	int p;
 	ArrayList<Interactible> interactibles;
 	ArrayList<Enemy> enemies;
 	Connection con;
@@ -26,6 +31,8 @@ public class Scenario {
 		right = (Math.random() < .5);
 		forward = (Math.random() < .5);
 		back = (Math.random() < .5);
+		prevDir = action;
+		p = progress;
 		boolean deadend;
 		switch (action) {
 		case 'l':
@@ -62,11 +69,23 @@ public class Scenario {
 			break;
 		}
 		f = floor;
-
-		numberofEnemies = (int) (Math.random() * 3);
 		enemies = new ArrayList<Enemy>();
-		for(int i = 0; i < numberofEnemies; i++) {
-			generateEnemies();
+		if(progress %10 == 0){
+			up = true;
+			numberofEnemies =1;
+			CallableStatement cs;
+			cs = con.prepareCall("{call getBoss(?, ?)}");
+			cs.setInt(1, f);
+			cs.registerOutParameter(2, Types.VARCHAR);
+			cs.execute();
+			String b = cs.getString(2);
+			enemies.add(new Enemy(f, b));
+		}
+		else {
+			numberofEnemies = (int) (Math.random() * 3);
+			for(int i = 0; i < numberofEnemies; i++) {
+				generateEnemies();
+			}
 		}
 		interactibles = new ArrayList<Interactible>();
 		int numofInteracts = (int) (Math.random() * 4);
@@ -75,11 +94,26 @@ public class Scenario {
 		}
 
 	}
+	public static Scenario create(int progress, int floor) throws SQLException{
+		ArrayList<Character> c = new ArrayList<Character>();
+		int i = (int) Math.random()*4;
+		c.add('l');
+		c.add('r');
+		c.add('f');
+		c.add('b');
+		if(progress>1){
+			return new Scenario(progress, floor, c.get(i), Scenario.create(progress-1, floor));
+		}
+		else{
+			return new Scenario(progress, floor, c.get(i), new Scenario(progress-1, floor));
+		}
+	}
 
 	public Scenario(int progress, int floor) {
 		left = true;
 		forward = true;
 		right = true;
+		down = true;
 		numberofEnemies = 0;
 		interactibles = new ArrayList<Interactible>();
 		enemies = new ArrayList<Enemy>();
@@ -87,6 +121,9 @@ public class Scenario {
 
 	public ArrayList<Character> getActions() {
 		ArrayList<Character> actions = new ArrayList<Character>();
+		if (p % 10 == 0){
+			actions.add('n');
+		}
 		if (left)
 			actions.add('l');
 		if (right)

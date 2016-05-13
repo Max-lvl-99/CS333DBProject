@@ -16,6 +16,8 @@ public class Game {
 	Player[] enemies;
 	Scenario checkpoint;
 	Scenario current;
+	int floor;
+	int progress;
 	ArrayList<Character> act;
 	// Needs to be referenced to access CD
 	Connection con;
@@ -34,15 +36,18 @@ public class Game {
 		// character = new Player(c);
 		Scenario checkpoint = new Scenario(0, 1);
 		current = checkpoint;
+		floor = 1;
+		progress = 0;
 
 		main();
 	}
 
 	public void main() throws SQLException {
+		floor = character.getFloor();
 		while (true) {
 			act = getActions();
 			System.out.println("Health: " + this.character.getHP() + "/" + this.character.getMaxHP() + " Floor: "
-					+ character.getFloor() + " Room: " + character.getRoom());
+					+ floor + " Progress: " + progress);
 			// System.out.println("l: go left; r: go right; f: go forward; "
 			// + "i: view inventory; d: delete from inventory; h: help; e:
 			// exit");
@@ -144,28 +149,64 @@ public class Game {
 		String sql;
 		switch (c) {
 		case "f":
-			if (current.forwardScen != null)
+			if (current.forwardScen != null) {
 				current = current.forwardScen;
-			else
-				current = new Scenario(0, 1, 'f', current);
+				progress = current.p;
+			}
+			else {
+				if(current.forward){
+					progress++;
+					current = new Scenario(progress, floor, 'f', current);
+				}
+				else {
+					System.out.println("You cannot go in that direction");
+				}
+			}
 			break;
 		case "b":
-			if (current.backScen != null)
+			if (current.backScen != null){
 				current = current.backScen;
-			else
-				current = new Scenario(0, 1, 'b', current);
+				progress = current.p;
+			}
+			else {
+				if(current.back){
+					progress++;
+					current = new Scenario(progress, floor, 'b', current);
+				}
+				else {
+					System.out.println("You cannot go in that direction");
+				}
+			}
 			break;
 		case "l":
-			if (current.leftScen != null)
+			if (current.leftScen != null){
 				current = current.leftScen;
-			else
-				current = new Scenario(0, 1, 'l', current);
+				progress = current.p;
+			}
+			else {
+				if(current.left){
+					progress++;
+					current = new Scenario(progress, floor, 'l', current);
+				}
+				else {
+					System.out.println("You cannot go in that direction");
+				}
+			}
 			break;
 		case "r":
-			if (current.rightScen != null)
+			if (current.rightScen != null){
 				current = current.rightScen;
-			else
-				current = new Scenario(0, 1, 'r', current);
+				progress = current.p;
+			}
+			else {
+				if(current.right){
+					progress++;
+					current = new Scenario(progress, floor, 'r', current);
+				}
+				else {
+					System.out.println("You cannot go in that direction");
+				}
+			}
 			break;
 		case "h":
 			helpString();
@@ -202,7 +243,7 @@ public class Game {
 			sql = "{call [saveState] (?,?,?,?)}";
 			stmt = con.prepareCall(sql);
 			stmt.setInt(1, character.getChID());	//ChID
-			stmt.setInt(2, character.getFloor());	//floor
+			stmt.setInt(2, floor);	//floor
 			stmt.setInt(3, character.getRoom());	//room
 			stmt.setInt(4,100);						//temp for actualHP
 //			stmt.setFloat(4, character.actualHP);	//actualHP, which is currently commented out, I dont know why
@@ -238,24 +279,83 @@ public class Game {
 			break;
 		case "3":
 			new Battle(character, current.enemies.get(0));
-			if (character.getHP() < 0) {
+			if (character.getHP() <= 0) {
 				System.out.println("Starting from checkpoint.");
 				current = checkpoint;
+			}
+			if(current.enemies.get(0).reduceHP(0)<=0){
+				current.enemies.remove(0);
+				current.numberofEnemies--;
 			}
 			break;
 		case "4":
 			new Battle(character, current.enemies.get(1));
-			if (character.getHP() < 0) {
+			if (character.getHP() <= 0) {
 				System.out.println("Starting from checkpoint.");
 				current = checkpoint;
+			}
+			if(current.enemies.get(1).reduceHP(0)<=0){
+				current.enemies.remove(1);
+				current.numberofEnemies--;
 			}
 			break;
 		case "e":
 			scan.close();
 			System.out.println("Quitting game");
 			System.exit(0);
+		case "n":
+			if(current.numberofEnemies>0){
+				System.out.println("You need to fight the boss to advance.");
+			}
+			else {
+				if(progress == 0){
+					if(floor == 1){
+						System.out.println("There is nothing important to find in the basement.");
+					}
+					else {
+						if(current.downScen!=null){
+							floor--;
+							current = current.downScen;
+							progress = current.p;
+							System.out.println("Going to floor " + floor);
+						}
+						else {
+							floor--;
+							progress = 10;
+							System.out.println("Going to floor " + floor );
+							Scenario down = Scenario.create(progress, floor);
+							current.downScen = down;
+							down.upScen = current;
+							current = down;
+						}
+					}
+				}
+				else {
+					if(current.up){
+						if(current.upScen != null){
+							current = current.upScen;
+							floor++;
+							progress = current.p;
+							System.out.println("Going to floor " + floor);
+						}
+						else {
+							floor++;
+							progress = 0;
+							System.out.println("Going to floor " + floor );
+							Scenario up = new Scenario(floor, progress);
+							current.upScen = up;
+							up.downScen = current;
+							current =  up;
+						}
+					}
+					else {
+						System.out.println("There is no elevator here.");
+					}
+				}
+			}
+			break;
+			}
 		}
-	}
 
 	private void displayInventory() throws SQLException {
 		String sql = "{call [Display Inventory] (?)}";
@@ -263,6 +363,16 @@ public class Game {
 		stmt.setInt(1, character.getInID());
 		ResultSet res = stmt.executeQuery();
 		StringBuilder str = new StringBuilder();
+		while (res.next()) {
+			str.append(res.getString(1));
+			str.append(" (");
+			str.append(res.getString(2));
+			str.append("); ");
+		}
+		sql = "{call [Display Inventory2] (?)}";
+		stmt = con.prepareCall(sql);
+		stmt.setInt(1, character.getInID());
+		res = stmt.executeQuery();
 		while (res.next()) {
 			str.append(res.getString(1));
 			str.append(" (");
