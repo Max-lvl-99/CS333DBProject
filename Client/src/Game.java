@@ -117,6 +117,8 @@ public class Game {
 			ex.append("Press i then hit enter to see your inventory of items and weapons.  ");
 		else if (c.equals('d'))
 			ex.append("Press d then hit enter to delete items from your inventory.  ");
+		else if (c.equals('z'))
+			ex.append("Press z then hit enter to save your current state.  ");
 		else if (c.equals('0'))
 			ex.append("Press 0 then hit enter to put an item you found into your inventory.  ");
 		else if (c.equals('1'))
@@ -179,7 +181,7 @@ public class Game {
 		case "d":
 			sql = "{call [UpdateItemInInventory] (?,?,?)}";
 			stmt = con.prepareCall(sql);
-			stmt.setInt(1, Player.inID);
+			stmt.setInt(1, character.getInID());
 
 			System.out.println("Insert item ID to update");
 			int i = scan.nextInt();
@@ -196,6 +198,17 @@ public class Game {
 		// DONE: Ryan allow the user to delete item(s) here
 		case "u":
 			// TODO: Next Milestone -- Use items
+		case "z":
+			sql = "{call [saveState] (?,?,?,?)}";
+			stmt = con.prepareCall(sql);
+			stmt.setInt(1, character.getChID());	//ChID
+			stmt.setInt(2, character.getFloor());	//floor
+			stmt.setInt(3, character.getRoom());	//room
+			stmt.setInt(4,100);						//temp for actualHP
+//			stmt.setFloat(4, character.actualHP);	//actualHP, which is currently commented out, I dont know why
+			stmt.executeUpdate();
+			System.out.println("Game Saved");
+			break;
 		case "p":
 			poisonWeapon();
 			break;
@@ -247,7 +260,7 @@ public class Game {
 	private void displayInventory() throws SQLException {
 		String sql = "{call [Display Inventory] (?)}";
 		stmt = con.prepareCall(sql);
-		stmt.setInt(1, Player.inID);
+		stmt.setInt(1, character.getInID());
 		ResultSet res = stmt.executeQuery();
 		StringBuilder str = new StringBuilder();
 		while (res.next()) {
@@ -262,7 +275,7 @@ public class Game {
 	private HashMap<Integer, Integer> displayPoisons(HashMap<Integer, Integer> displayNumToItID) throws SQLException {
 		String sql = "{call displayPoisons (?)}";
 		stmt = con.prepareCall(sql);
-		stmt.setInt(1, Player.inID);
+		stmt.setInt(1, character.getInID());
 		ResultSet res = stmt.executeQuery();
 		StringBuilder str = new StringBuilder();
 		int i = 1;
@@ -351,7 +364,7 @@ public class Game {
 		stmt.setInt(2, character.chID);
 		stmt.setInt(3, ItID);
 		stmt.setInt(4, WeID);
-		stmt.setInt(5, character.inID);
+		stmt.setInt(5, character.getInID());
 		stmt.registerOutParameter(1, Types.INTEGER);
 		boolean hadResults = stmt.execute();
 		int result = stmt.getInt(1);

@@ -14,7 +14,7 @@ public class Player {
 	private int floor;
 	private int room;
 	int chID;
-	static int inID;
+	private int inID;
 	private float dmgMult;
 	private float hpMult;
 	private String weaponName;
@@ -43,7 +43,7 @@ public class Player {
 			this.floor = Integer.parseInt(res.getString(4));
 			this.room = Integer.parseInt(res.getString(5));
 			this.chID = Integer.parseInt(res.getString(6));
-			this.inID = Integer.parseInt(res.getString(7));
+			this.setInID(Integer.parseInt(res.getString(7)));
 		}
 
 		// sql = "{call InsertIntoInventory (?, ?, ?)}";
@@ -75,7 +75,7 @@ public class Player {
 
 	public void insertIntoInventory(int id, String type) throws SQLException {
 		CallableStatement cs = con.prepareCall("{call InsertIntoInventory (?, ?)}");
-		cs.setInt(1, inID);
+		cs.setInt(1, getInID());
 		cs.setInt(2, id);
 		cs.execute();
 	}
@@ -110,7 +110,7 @@ public class Player {
 	public ArrayList<String> getWeapons() throws SQLException {
 		ArrayList<String> weapons = new ArrayList<String>();
 		stmt = con.prepareCall("{call getWeapons(?)}");
-		stmt.setInt(1, inID);
+		stmt.setInt(1, getInID());
 		boolean b = stmt.execute();
 		while (b) {
 			ResultSet rs = stmt.getResultSet();
@@ -127,7 +127,7 @@ public class Player {
 	public ArrayList<String> getItems() throws SQLException {
 		ArrayList<String> items = new ArrayList<String>();
 		stmt = con.prepareCall("{call getItems(?)}");
-		stmt.setInt(1, inID);
+		stmt.setInt(1, getInID());
 		boolean b = stmt.execute();
 		while (b) {
 			ResultSet rs = stmt.getResultSet();
@@ -167,5 +167,13 @@ public class Player {
 
 	public int getChID() {
 		return this.chID;
+	}
+
+	int getInID() {
+		return inID;
+	}
+
+	public void setInID(int inID) {
+		this.inID = inID;
 	}
 }

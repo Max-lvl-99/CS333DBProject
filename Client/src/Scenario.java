@@ -99,6 +99,7 @@ public class Scenario {
 		actions.add('p');
 		actions.add('d');
 		// actions.add('u'); next milestone
+		actions.add('z');	//save state of game
 		actions.add('e');
 		int count = 0;
 		for (Interactible c : interactibles) {
