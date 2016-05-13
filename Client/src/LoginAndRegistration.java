@@ -7,12 +7,12 @@ import java.util.Scanner;
 public class LoginAndRegistration {
 	protected static String checkUNameAndPass(Scanner scan, CallableStatement stmt, Connection con)
 			throws SQLException {
-		System.out.println("Please enter your username");
+		System.out.println("Please enter your username then hit enter");
 		String next;
 		char[] passc;
 		String pass;
 		next = scan.next();
-		System.out.println("Please enter your password");
+		System.out.println("Please enter your password then hit enter");
 		// pass = scan.next();
 		// TODO: Uncomment this for Windows terminal
 		passc = System.console().readPassword();

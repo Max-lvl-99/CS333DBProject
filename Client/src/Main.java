@@ -28,8 +28,8 @@ public class Main {
 		// pass = new String(console.readPassword("Please enter your password:
 		// "));
 		System.out.println("Welcome to MushvsGrump");
-		System.out.println("If you are a previous user, please press p; if you want to register "
-				+ "as a new user, please press r");
+		System.out.println("If you are a previous user, please press p then hit enter; if you want to register "
+				+ "as a new user, please press r then hit enter");
 		next = scan.next();
 		String username = null;
 		if (next.equals("r")) {

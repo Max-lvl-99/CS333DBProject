@@ -100,40 +100,40 @@ public class Game {
 	private StringBuilder addExplanation(StringBuilder ex, Character c) {
 		// System.out.println("in addExplanations c: " + c + " ex: " + ex);
 		if (c.equals('f'))
-			ex.append("Press f then hit enter to move forward to the next room.  ");
+			ex.append("Press f to move forward to the next room.  ");
 		else if (c.equals('p'))
 			ex.append("Press p to poison a weapon.  ");
 		else if (c.equals('s'))
 			if (showExplanations)
-				ex.append("Press s then hit enter to hide these explanations.  ");
+				ex.append("Press s to hide these explanations.  ");
 			else
-				ex.append("Press s then hit enter to show the explanations.  ");
+				ex.append("Press s to show the explanations.  ");
 		else if (c.equals('l'))
-			ex.append("Press l then hit enter to move to the room that's left of this room.  ");
+			ex.append("Press l to move to the room that's left of this room.  ");
 		else if (c.equals('r'))
-			ex.append("Press r then hit enter to move to the room that's right of this room.  ");
+			ex.append("Press r to move to the room that's right of this room.  ");
 		else if (c.equals('b'))
-			ex.append("Press b then hit enter to go back to the room you came from. ");
+			ex.append("Press b to go back to the room you came from. ");
 		else if (c.equals('h'))
-			ex.append("Press h then hit enter to see the help screen.  ");
+			ex.append("Press h to see the help screen.  ");
 		else if (c.equals('e'))
-			ex.append("Press e then hit enter to exit the game.  ");
+			ex.append("Press e to exit the game.  ");
 		else if (c.equals('i'))
-			ex.append("Press i then hit enter to see your inventory of items and weapons.  ");
+			ex.append("Press i to see your inventory of items and weapons.  ");
 		else if (c.equals('d'))
-			ex.append("Press d then hit enter to delete items from your inventory.  ");
+			ex.append("Press d to delete items from your inventory.  ");
 		else if (c.equals('z'))
-			ex.append("Press z then hit enter to save your current state.  ");
+			ex.append("Press z to save your current state.  ");
 		else if (c.equals('0'))
-			ex.append("Press 0 then hit enter to put an item you found into your inventory.  ");
+			ex.append("Press 0 to put an item you found into your inventory.  ");
 		else if (c.equals('1'))
-			ex.append("Press 1 then hit enter to put an item you found into your inventory.  ");
+			ex.append("Press 1 to put an item you found into your inventory.  ");
 		else if (c.equals('2'))
-			ex.append("Press 2 then hit enter to put an item you found into your inventory.  ");
+			ex.append("Press 2 to put an item you found into your inventory.  ");
 		else if (c.equals('3'))
-			ex.append("Press 3 then hit enter to battle an enemy!  ");
+			ex.append("Press 3 to battle an enemy!  ");
 		else if (c.equals('4'))
-			ex.append("Press 4 then hit enter to battle an enemy!  ");
+			ex.append("Press 4 to battle an enemy!  ");
 		return ex;
 	}
 
@@ -152,58 +152,50 @@ public class Game {
 			if (current.forwardScen != null) {
 				current = current.forwardScen;
 				progress = current.p;
-			}
-			else {
-				if(current.forward){
+			} else {
+				if (current.forward) {
 					progress++;
 					current = new Scenario(progress, floor, 'f', current);
-				}
-				else {
+				} else {
 					System.out.println("You cannot go in that direction");
 				}
 			}
 			break;
 		case "b":
-			if (current.backScen != null){
+			if (current.backScen != null) {
 				current = current.backScen;
 				progress = current.p;
-			}
-			else {
-				if(current.back){
+			} else {
+				if (current.back) {
 					progress++;
 					current = new Scenario(progress, floor, 'b', current);
-				}
-				else {
+				} else {
 					System.out.println("You cannot go in that direction");
 				}
 			}
 			break;
 		case "l":
-			if (current.leftScen != null){
+			if (current.leftScen != null) {
 				current = current.leftScen;
 				progress = current.p;
-			}
-			else {
-				if(current.left){
+			} else {
+				if (current.left) {
 					progress++;
 					current = new Scenario(progress, floor, 'l', current);
-				}
-				else {
+				} else {
 					System.out.println("You cannot go in that direction");
 				}
 			}
 			break;
 		case "r":
-			if (current.rightScen != null){
+			if (current.rightScen != null) {
 				current = current.rightScen;
 				progress = current.p;
-			}
-			else {
-				if(current.right){
+			} else {
+				if (current.right) {
 					progress++;
 					current = new Scenario(progress, floor, 'r', current);
-				}
-				else {
+				} else {
 					System.out.println("You cannot go in that direction");
 				}
 			}
@@ -242,11 +234,12 @@ public class Game {
 		case "z":
 			sql = "{call [saveState] (?,?,?,?)}";
 			stmt = con.prepareCall(sql);
-			stmt.setInt(1, character.getChID());	//ChID
-			stmt.setInt(2, floor);	//floor
-			stmt.setInt(3, character.getRoom());	//room
-			stmt.setInt(4,100);						//temp for actualHP
-//			stmt.setFloat(4, character.actualHP);	//actualHP, which is currently commented out, I dont know why
+			stmt.setInt(1, character.getChID()); // ChID
+			stmt.setInt(2, floor); // floor
+			stmt.setInt(3, character.getRoom()); // room
+			stmt.setInt(4, 100); // temp for actualHP
+			// stmt.setFloat(4, character.actualHP); //actualHP, which is
+			// currently commented out, I dont know why
 			stmt.executeUpdate();
 			System.out.println("Game Saved");
 			break;
@@ -283,7 +276,7 @@ public class Game {
 				System.out.println("Starting from checkpoint.");
 				current = checkpoint;
 			}
-			if(current.enemies.get(0).reduceHP(0)<=0){
+			if (current.enemies.get(0).reduceHP(0) <= 0) {
 				current.enemies.remove(0);
 				current.numberofEnemies--;
 			}
@@ -294,7 +287,7 @@ public class Game {
 				System.out.println("Starting from checkpoint.");
 				current = checkpoint;
 			}
-			if(current.enemies.get(1).reduceHP(0)<=0){
+			if (current.enemies.get(1).reduceHP(0) <= 0) {
 				current.enemies.remove(1);
 				current.numberofEnemies--;
 			}
@@ -304,58 +297,52 @@ public class Game {
 			System.out.println("Quitting game");
 			System.exit(0);
 		case "n":
-			if(current.numberofEnemies>0){
+			if (current.numberofEnemies > 0) {
 				System.out.println("You need to fight the boss to advance.");
-			}
-			else {
-				if(progress == 0){
-					if(floor == 1){
+			} else {
+				if (progress == 0) {
+					if (floor == 1) {
 						System.out.println("There is nothing important to find in the basement.");
-					}
-					else {
-						if(current.downScen!=null){
+					} else {
+						if (current.downScen != null) {
 							floor--;
 							current = current.downScen;
 							progress = current.p;
 							System.out.println("Going to floor " + floor);
-						}
-						else {
+						} else {
 							floor--;
 							progress = 10;
-							System.out.println("Going to floor " + floor );
+							System.out.println("Going to floor " + floor);
 							Scenario down = Scenario.create(progress, floor);
 							current.downScen = down;
 							down.upScen = current;
 							current = down;
 						}
 					}
-				}
-				else {
-					if(current.up){
-						if(current.upScen != null){
+				} else {
+					if (current.up) {
+						if (current.upScen != null) {
 							current = current.upScen;
 							floor++;
 							progress = current.p;
 							System.out.println("Going to floor " + floor);
-						}
-						else {
+						} else {
 							floor++;
 							progress = 0;
-							System.out.println("Going to floor " + floor );
+							System.out.println("Going to floor " + floor);
 							Scenario up = new Scenario(floor, progress);
 							current.upScen = up;
 							up.downScen = current;
-							current =  up;
+							current = up;
 						}
-					}
-					else {
+					} else {
 						System.out.println("There is no elevator here.");
 					}
 				}
 			}
 			break;
-			}
 		}
+	}
 
 	private void displayInventory() throws SQLException {
 		String sql = "{call [Display Inventory] (?)}";
