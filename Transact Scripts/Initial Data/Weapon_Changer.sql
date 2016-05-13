@@ -1,4 +1,4 @@
-INSERT INTO Weapon_Changer(ItID, Amt_Changed, Weapon_Type)
+/*INSERT INTO Weapon_Changer(ItID, Amt_Changed, Weapon_Type)
 	VALUES (6, .05, 'Blade');
 INSERT INTO Weapon_Changer(ItID, Amt_Changed, Weapon_Type)
 	VALUES (7,.1,'Blade');
@@ -29,4 +29,7 @@ INSERT INTO Weapon_Changer(ItID, Amt_Changed, Weapon_Type)
 INSERT INTO Weapon_Changer(ItID, Amt_Changed, Weapon_Type)
 	Values (20,.2,'Ranged');
 INSERT INTO Weapon_Changer(ItID, Amt_Changed, Weapon_Type)
-	VALUES (21,.3,'Ranged');
+	VALUES (21,.3,'Ranged');*/
+select * from item;
+INSERT INTO Weapon_Changer(ItID, Amt_Changed, Weapon_Type)
+	Values (22,0,'Blunt');

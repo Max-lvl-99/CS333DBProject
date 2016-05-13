@@ -3,7 +3,7 @@ GO
 --If we need to really reset the table delete rows and reset identity seed
 --before inserting again.
 --Delete From Item;
-DBCC CHECKIDENT ('Item', RESEED, 0);
+/*DBCC CHECKIDENT ('Item', RESEED, 0);
 INSERT INTO Item (ItName, ItDesc)
 	VALUES ('Weak Healing Potion', 
 	'This potion heals your health by 15% of your maximum possible health.');
@@ -86,4 +86,7 @@ INSERT INTO Item (ItName, ItDesc)
 	VALUES ('Alchemist''s Ranged Poison',
 	'This is an alchemist''s special poison to be used on any range weapon.  ' + 
 	'This poison increases the damage dealt by any range attack by 30%.' +
-	'Once applied to a range weapon, it cannot be reused.');
+	'Once applied to a range weapon, it cannot be reused.'); */
+INSERT INTO Item (ItName, ItDesc)
+	VALUES ('No Poison',
+	'Placeholder instead of null.');
