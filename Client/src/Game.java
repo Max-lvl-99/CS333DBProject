@@ -44,6 +44,7 @@ public class Game {
 
 	public void main() throws SQLException {
 		floor = character.getFloor();
+		progress = character.getRoom();
 		while (true) {
 			act = getActions();
 			System.out.println("Health: " + this.character.getHP() + "/" + this.character.getMaxHP() + " Floor: "
@@ -244,7 +245,7 @@ public class Game {
 			stmt = con.prepareCall(sql);
 			stmt.setInt(1, character.getChID());	//ChID
 			stmt.setInt(2, floor);	//floor
-			stmt.setInt(3, character.getRoom());	//room
+			stmt.setInt(3, progress);	//room
 			stmt.setInt(4,100);						//temp for actualHP
 //			stmt.setFloat(4, character.actualHP);	//actualHP, which is currently commented out, I dont know why
 			stmt.executeUpdate();
