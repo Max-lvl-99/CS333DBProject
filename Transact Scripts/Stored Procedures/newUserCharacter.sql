@@ -18,7 +18,6 @@ Insert Into User_Character (ChID)
 --Insert new ChToInv row
 Declare @InID int;
 Select @InID = InID From User_Character Where ChID = @newChID;
-Insert Into ChToInv (InID, ChID) Values(@InID, @newChID);
 Insert into Has (ChId, WeID, Weapon_Poison) Values(@newChID, 1, 22);
 --Add new user chacter to this username
 Insert Into UsernameToUserCharacters (Username, ChID)
