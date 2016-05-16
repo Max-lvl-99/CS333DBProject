@@ -15,10 +15,6 @@ Insert Into Character (ChName, Base_HP) Values(@UCName, 10);
 Select @newChID = Max(ChID) from Character;
 Insert Into User_Character (ChID)
 	Values (@newChID);
---Insert new ChToInv row
-Declare @InID int;
-Select @InID = InID From User_Character Where ChID = @newChID;
-Insert Into ChToInv (InID, ChID) Values(@InID, @newChID);
 --Add new user chacter to this username
 Insert Into UsernameToUserCharacters (Username, ChID)
 	Values (@Username, @newChID);

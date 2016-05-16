@@ -15,7 +15,6 @@ Insert Into Character (ChName, Base_HP, CurrentlyWielding) Values(@UCName, 100, 
 Select @newChID = Max(ChID) from Character;
 Insert Into User_Character (ChID)
 	Values (@newChID);
---Insert new ChToInv row
 Declare @InID int;
 Select @InID = InID From User_Character Where ChID = @newChID;
 Insert into Has (ChId, WeID, Weapon_Poison) Values(@newChID, 1, 22);
