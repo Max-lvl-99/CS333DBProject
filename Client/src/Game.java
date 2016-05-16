@@ -359,16 +359,16 @@ public class Game {
 			str.append(res.getString(2));
 			str.append("); ");
 		}
-		sql = "{call [Display Inventory2] (?)}";
-		stmt = con.prepareCall(sql);
-		stmt.setInt(1, character.getInID());
-		res = stmt.executeQuery();
-		while (res.next()) {
-			str.append(res.getString(1));
-			str.append(" (");
-			str.append(res.getString(2));
-			str.append("); ");
-		}
+		// sql = "{call [Display Inventory2] (?)}";
+		// stmt = con.prepareCall(sql);
+		// stmt.setInt(1, character.getInID());
+		// res = stmt.executeQuery();
+		// while (res.next()) {
+		// str.append(res.getString(1));
+		// str.append(" (");
+		// str.append(res.getString(2));
+		// str.append("); ");
+		// }
 		System.out.println(str.toString());
 	}
 

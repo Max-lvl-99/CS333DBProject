@@ -74,15 +74,13 @@ public class Player {
 	}
 
 	public void insertIntoInventory(int id, String type) throws SQLException {
-		CallableStatement cs = con.prepareCall("{call InsertIntoInventory (?, ?, ?)}");
+		CallableStatement cs = con.prepareCall("{call InsertIntoInventory (?, ?)}");
 		cs.setInt(1, getInID());
 		cs.setInt(2, id);
-		cs.setString(3, type);
 		cs.execute();
 	}
 
 	public void insertIntoHas(int id, int chID2) throws SQLException {
-		System.out.println("WeID: " + id);
 		CallableStatement cs = con.prepareCall("{call InsertIntoHas (?, ?)}");
 		cs.setInt(1, chID2);
 		cs.setInt(2, id);
