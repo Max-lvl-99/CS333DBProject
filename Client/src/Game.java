@@ -49,11 +49,9 @@ public class Game {
 			act = getActions();
 			System.out.println("Health: " + this.character.getHP() + "/" + this.character.getMaxHP() + " Floor: "
 					+ floor + " Progress: " + progress);
-			// System.out.println("l: go left; r: go right; f: go forward; "
-			// + "i: view inventory; d: delete from inventory; h: help; e:
-			// exit");
+			// stringActions() also builds explanations (which will be printed
+			// automatically)
 			String choices = stringActions();
-			System.out.println(explanations.toString());
 			System.out.println("Your choices are: " + choices);
 			String c = scan.next();
 			handleActions(c);
@@ -73,20 +71,19 @@ public class Game {
 		if (showExplanations) {
 			for (Character c : act) {
 				sb.append(c);
-				explanations = addExplanation(explanations, c);
+				addExplanation(explanations, c);
 				sb.append(' ');
 			}
 		} else {
 			for (Character c : act) {
 				sb.append(c);
-				// explanations = addExplanation(explanations, c);
+				addExplanation(explanations, c);
 				sb.append(' ');
 			}
 		}
-
 		// Make the option to show or hide explanations last
 		sb.append('s');
-		explanations = addExplanation(explanations, 's');
+		addExplanation(explanations, 's');
 		sb.append(' ');
 		return sb.toString();
 	}
@@ -98,44 +95,42 @@ public class Game {
 	 * @param explanations2
 	 * @param c
 	 */
-	private StringBuilder addExplanation(StringBuilder ex, Character c) {
-		// System.out.println("in addExplanations c: " + c + " ex: " + ex);
+	private void addExplanation(StringBuilder ex, Character c) {
 		if (c.equals('f'))
-			ex.append("Press f to move forward to the next room.  ");
+			System.out.println("Press f to move forward to the next room.  ");
 		else if (c.equals('p'))
-			ex.append("Press p to poison a weapon.  ");
+			System.out.println("Press p to poison a weapon.  ");
 		else if (c.equals('s'))
 			if (showExplanations)
-				ex.append("Press s to hide these explanations.  ");
+				System.out.println("Press s to hide these explanations.  ");
 			else
-				ex.append("Press s to show the explanations.  ");
+				System.out.println("Press s to show the explanations.  ");
 		else if (c.equals('l'))
-			ex.append("Press l to move to the room that's left of this room.  ");
+			System.out.println("Press l to move to the room that's left of this room.  ");
 		else if (c.equals('r'))
-			ex.append("Press r to move to the room that's right of this room.  ");
+			System.out.println("Press r to move to the room that's right of this room.  ");
 		else if (c.equals('b'))
-			ex.append("Press b to go back to the room you came from. ");
+			System.out.println("Press b to go back to the room you came from. ");
 		else if (c.equals('h'))
-			ex.append("Press h to see the help screen.  ");
+			System.out.println("Press h to see the help screen.  ");
 		else if (c.equals('e'))
-			ex.append("Press e to exit the game.  ");
+			System.out.println("Press e to exit the game.  ");
 		else if (c.equals('i'))
-			ex.append("Press i to see your inventory of items and weapons.  ");
+			System.out.println("Press i to see your inventory of items and weapons.  ");
 		else if (c.equals('d'))
-			ex.append("Press d to delete items from your inventory.  ");
+			System.out.println("Press d to delete items from your inventory.  ");
 		else if (c.equals('z'))
-			ex.append("Press z to save your current state.  ");
+			System.out.println("Press z to save your current state.  ");
 		else if (c.equals('0'))
-			ex.append("Press 0 to put an item you found into your inventory.  ");
+			System.out.println("Press 0 to put an item you found into your inventory.  ");
 		else if (c.equals('1'))
-			ex.append("Press 1 to put an item you found into your inventory.  ");
+			System.out.println("Press 1 to put an item you found into your inventory.  ");
 		else if (c.equals('2'))
-			ex.append("Press 2 to put an item you found into your inventory.  ");
+			System.out.println("Press 2 to put an item you found into your inventory.  ");
 		else if (c.equals('3'))
-			ex.append("Press 3 to battle an enemy!  ");
+			System.out.println("Press 3 to battle an enemy!  ");
 		else if (c.equals('4'))
-			ex.append("Press 4 to battle an enemy!  ");
-		return ex;
+			System.out.println("Press 4 to battle an enemy!  ");
 	}
 
 	/**
@@ -393,8 +388,9 @@ public class Game {
 			str.append("Damage increase (vs. no poison): x1" + res.getString(3).substring(1) + " for weapons of type "
 					+ res.getString(4) + ".  ");
 			i++;
+			System.out.println(str.toString());
+			str = new StringBuilder();
 		}
-		System.out.println(str.toString());
 		return displayNumToItID;
 	}
 
@@ -415,6 +411,8 @@ public class Game {
 					str.append(poison);
 					str.append(", x1" + res.getString(5).substring(1) + " dmg. ");
 				}
+				System.out.println(str.toString());
+				str = new StringBuilder();
 			}
 		} else {
 			int i = 1;
@@ -430,9 +428,10 @@ public class Game {
 					str.append(", x1" + res.getString(5).substring(1) + " dmg. ");
 				}
 				i++;
+				System.out.println(str.toString());
+				str = new StringBuilder();
 			}
 		}
-		System.out.println(str.toString());
 		return displayNumToWeID;
 	}
 

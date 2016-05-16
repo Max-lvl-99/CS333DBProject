@@ -52,11 +52,11 @@ public class Main {
 	}
 
 	private static void nextStep(String next, Scanner scan, String username, String[] args) throws SQLException {
-		System.out.println("Press e then enter to exit the game.  "
-				+ "Press n then enter to start a new game (and create a new character).  "
-				+ "Press p then enter to view a list of you previously made characters and type in a character's name to play as that character.  "
-				+ "Press d then enter to delete one of your previously made characters.  "
-				+ "Press l then enter to enter your username and password again");
+		System.out.println("Press e then enter to exit the game.  ");
+				System.out.println("Press n then enter to start a new game (and create a new character).  ");
+				System.out.println("Press p then enter to view a list of you previously made characters and type in a character's name to play as that character.  ");
+				System.out.println("Press d then enter to delete one of your previously made characters.  ");
+				System.out.println("Press l then enter to enter your username and password again");
 		next = scan.next();
 		if (next.equals("e")) {
 			scan.close();
