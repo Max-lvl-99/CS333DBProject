@@ -77,7 +77,7 @@ public class Game {
 		} else {
 			for (Character c : act) {
 				sb.append(c);
-				addExplanation(explanations, c);
+				// addExplanation(explanations, c);
 				sb.append(' ');
 			}
 		}
@@ -411,6 +411,7 @@ public class Game {
 					str.append(poison);
 					str.append(", x1" + res.getString(5).substring(1) + " dmg. ");
 				}
+				str.append(" Type: " + res.getString(6));
 				System.out.println(str.toString());
 				str = new StringBuilder();
 			}
@@ -428,6 +429,7 @@ public class Game {
 					str.append(", x1" + res.getString(5).substring(1) + " dmg. ");
 				}
 				i++;
+				str.append(" Type: " + res.getString(6));
 				System.out.println(str.toString());
 				str = new StringBuilder();
 			}
