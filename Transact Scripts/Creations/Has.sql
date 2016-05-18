@@ -8,7 +8,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 --drop table Has;
-CREATE TABLE [dbo].[Has](
+/*CREATE TABLE [dbo].[Has](
 	[ChId] [int] NOT NULL,
 	[WeID] [int] NOT NULL,
 	[Weapon_Poison] [int] default NULL,
@@ -24,12 +24,12 @@ ON DELETE CASCADE
 GO
 
 ALTER TABLE [dbo].[Has] CHECK CONSTRAINT [FK_Has_Character]
-GO
+GO*/
 
 ALTER TABLE [dbo].[Weapon]  WITH CHECK ADD FOREIGN KEY([Weapon_Poison])
-REFERENCES [dbo].[Item] ([ItID]) on update cascade on delete set null;
+REFERENCES [dbo].[Item] ([ItID]) on update no action on delete no action;
 GO
-
+/*
 ALTER TABLE [dbo].[Has]  WITH CHECK ADD  CONSTRAINT [FK_Has_Weapon] FOREIGN KEY([WeID])
 REFERENCES [dbo].[Weapon] ([WeID])
 ON UPDATE CASCADE
@@ -39,3 +39,4 @@ GO
 ALTER TABLE [dbo].[Has] CHECK CONSTRAINT [FK_Has_Weapon]
 GO
 
+*/
