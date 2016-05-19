@@ -228,6 +228,53 @@ public class Game {
 			
 			
 			
+			System.out.println("You currently own: ");
+			int count = 0;
+			ArrayList<String> d = character.getItems();
+			for(String character : d){
+				System.out.println(count + " " + c);
+				count++;
+			}
+			System.out.println("Choose your item.");
+			int i1 = scan.nextInt();
+			CallableStatement cs = con.prepareCall("{call getTypeandPotency(?,?,?)}");
+			cs.setString(1, d.get(i1));
+			cs.registerOutParameter(2, Types.INTEGER);
+			cs.registerOutParameter(3, Types.FLOAT);
+			cs.execute();
+			float f = cs.getFloat(3);
+			if(i1 < 5){
+				character.heal(f);
+			}
+			else {
+				HashMap<Integer, Integer> displayNumToItID = new HashMap<Integer, Integer>();
+				displayNumToItID = displayPoisons(displayNumToItID);
+				System.out.println("Enter the number that corresponds to the poison you want to use: (e to exit)");
+				String next = scan.next();
+				if (next.equals("e"))
+					return;
+				Integer pNum = Integer.parseInt(next);
+				if (!displayNumToItID.containsKey(pNum)) {
+					System.out.println("Error: That number does not correspond to a poison");
+					return;
+				}
+				HashMap<Integer, Integer> displayNumToWeID = new HashMap<Integer, Integer>();
+				System.out.println("Okay.  Now, here are you weapons: ");
+				displayNumToWeID = displayWeapons(displayNumToWeID);
+				System.out.println("Enter the number that corresponds to the weapon you want to poison: (e to exit) ");
+				next = scan.next();
+				if (next.equals("e"))
+					return;
+				Integer wNum = Integer.parseInt(next);
+				if (!displayNumToWeID.containsKey(wNum)) {
+					System.out.println("Error: That number does not correspond to a weapon");
+					return;
+				}
+				applyPoison(displayNumToItID.get(pNum), displayNumToWeID.get(wNum));
+			}
+			break;
+		
+			
 			
 			
 			

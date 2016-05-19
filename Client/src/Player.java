@@ -109,7 +109,7 @@ public class Player {
 		if (maxHP < hP) {
 			hP = maxHP;
 		}
-//		System.out.println(hP);
+		System.out.println("Healing you " + heal);
 		stmt = con.prepareCall("{call setHP(?,?)}");
 		stmt.setInt(1, chID);
 		stmt.setFloat(2, hP);

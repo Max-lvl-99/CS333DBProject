@@ -6,6 +6,8 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+//import org.apache.commons.lang.math.NumberUtils;
+
 
 public class Battle {
 	Player p;
@@ -119,11 +121,10 @@ public class Battle {
 		cs.registerOutParameter(3, Types.FLOAT);
 		cs.execute();
 		float f = cs.getFloat(3);
-		if(cs.getInt(2) < 5){
-			System.out.println("dsafjlkdsajfljdsaf;ljdsa;lfjdsaf;ljdsa;lfj;ldsaf");
-			p.heal(cs.getInt(2));
+		if(i < 5){
+			p.heal(f);
 		}
-		else {
+		else if(cs.getInt(2) <= Integer.MAX_VALUE){
 			HashMap<Integer, Integer> displayNumToItID = new HashMap<Integer, Integer>();
 			displayNumToItID = displayPoisons(displayNumToItID);
 			System.out.println("Enter the number that corresponds to the poison you want to use: (e to exit)");
@@ -148,6 +149,9 @@ public class Battle {
 				return;
 			}
 			applyPoison(displayNumToItID.get(pNum), displayNumToWeID.get(wNum));
+		}
+		else{
+			System.out.println("Invalid input");
 		}
 	}
 	private HashMap<Integer, Integer> displayWeapons(HashMap<Integer, Integer> displayNumToWeID) throws SQLException {
