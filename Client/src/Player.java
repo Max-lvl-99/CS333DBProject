@@ -105,13 +105,16 @@ public class Player {
 
 	public void heal(float heal) throws SQLException {
 		float hP = getHP() + maxHP * heal;
+//		System.out.println(heal);
 		if (maxHP < hP) {
 			hP = maxHP;
 		}
+//		System.out.println(hP);
 		stmt = con.prepareCall("{call setHP(?,?)}");
 		stmt.setInt(1, chID);
 		stmt.setFloat(2, hP);
 		stmt.execute();
+		this.getHP();
 	}
 
 	public ArrayList<String> getWeapons() throws SQLException {

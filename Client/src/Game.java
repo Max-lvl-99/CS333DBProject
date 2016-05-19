@@ -224,8 +224,14 @@ public class Game {
 
 			System.out.println(i + " items added!");
 			break;
-		// DONE: Ryan allow the user to delete item(s) here
 		case "u":
+			
+			
+			
+			
+			
+			
+			
 			// TODO: Next Milestone -- Use items
 		case "z":
 			sql = "{call [saveState] (?,?,?,?)}";

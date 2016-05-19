@@ -72,7 +72,7 @@ public class Battle {
 			}
 		}
 		if(b==2){
-			System.out.println("You fleed the battle.");
+			System.out.println("You fled the battle.");
 		}
 		if(b==1){
 			System.out.println("You are defeated.");
@@ -119,8 +119,9 @@ public class Battle {
 		cs.registerOutParameter(3, Types.FLOAT);
 		cs.execute();
 		float f = cs.getFloat(3);
-		if(cs.getInt(2)==1){
-			p.heal(f);
+		if(cs.getInt(2) < 5){
+			System.out.println("dsafjlkdsajfljdsaf;ljdsa;lfjdsaf;ljdsa;lfj;ldsaf");
+			p.heal(cs.getInt(2));
 		}
 		else {
 			HashMap<Integer, Integer> displayNumToItID = new HashMap<Integer, Integer>();
