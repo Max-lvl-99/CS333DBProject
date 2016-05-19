@@ -117,8 +117,8 @@ public class Game {
 			System.out.println("Press e to exit the game.  ");
 		else if (c.equals('i'))
 			System.out.println("Press i to see your inventory of items and weapons.  ");
-		else if (c.equals('d'))
-			System.out.println("Press d to delete items from your inventory.  ");
+//		else if (c.equals('d'))
+//			System.out.println("Press d to delete items from your inventory.  ");
 		else if (c.equals('z'))
 			System.out.println("Press z to save your current state.  ");
 		else if (c.equals('0'))
@@ -207,23 +207,23 @@ public class Game {
 			displayWeapons(null);
 			break;
 		// DONE: Ryan make the inventory show up here
-		case "d":
-			sql = "{call [UpdateItemInInventory] (?,?,?)}";
-			stmt = con.prepareCall(sql);
-			stmt.setInt(1, character.getInID());
-
-			System.out.println("Insert item ID to update");
-			int i = scan.nextInt();
-			stmt.setInt(2, i);
-
-			System.out.println("Insert amount to update (negative for removal)");
-			i = scan.nextInt();
-			stmt.setInt(3, i);
-
-			stmt.executeUpdate();
-
-			System.out.println(i + " items added!");
-			break;
+//		case "d":
+//			sql = "{call [UpdateItemInInventory] (?,?,?)}";
+//			stmt = con.prepareCall(sql);
+//			stmt.setInt(1, character.getInID());
+//
+//			System.out.println("Insert item ID to update");
+//			int i = scan.nextInt();
+//			stmt.setInt(2, i);
+//
+//			System.out.println("Insert amount to update (negative for removal)");
+//			i = scan.nextInt();
+//			stmt.setInt(3, i);
+//
+//			stmt.executeUpdate();
+//
+//			System.out.println(i + " items added!");
+//			break;
 		case "u":
 			
 			
@@ -232,12 +232,22 @@ public class Game {
 			int count = 0;
 			ArrayList<String> d = character.getItems();
 			for(String character : d){
-				System.out.println(count + " " + c);
+				System.out.println(count + " " + character);
 				count++;
 			}
 			System.out.println("Choose your item.");
 			int i1 = scan.nextInt();
+//			String toInput = 
+//			CallableStatement cs = con.prepareCall( "{call getNameFromID(?,?");
+//			cs.setString(1, d)
+			
+			
+			
 			CallableStatement cs = con.prepareCall("{call getTypeandPotency(?,?,?)}");
+			
+			
+			
+//			System.out.println(d.get(i1));
 			cs.setString(1, d.get(i1));
 			cs.registerOutParameter(2, Types.INTEGER);
 			cs.registerOutParameter(3, Types.FLOAT);
