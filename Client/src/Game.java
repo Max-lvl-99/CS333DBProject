@@ -237,17 +237,12 @@ public class Game {
 			}
 			System.out.println("Choose your item.");
 			int i1 = scan.nextInt();
-//			String toInput = 
-//			CallableStatement cs = con.prepareCall( "{call getNameFromID(?,?");
-//			cs.setString(1, d)
-			
-			
 			
 			CallableStatement cs = con.prepareCall("{call getTypeandPotency(?,?,?)}");
 			
 			
 			
-//			System.out.println(d.get(i1));
+			System.out.println("You chose " + d.get(i1));
 			cs.setString(1, d.get(i1));
 			cs.registerOutParameter(2, Types.INTEGER);
 			cs.registerOutParameter(3, Types.FLOAT);
