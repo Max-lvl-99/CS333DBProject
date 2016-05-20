@@ -13,10 +13,10 @@ public class LoginAndRegistration {
 		String pass;
 		next = scan.next();
 		System.out.println("Please enter your password then hit enter");
-		// pass = scan.next();
+		pass = scan.next();
 		// TODO: Uncomment this for Windows terminal
-		passc = System.console().readPassword();
-		pass = String.valueOf(passc);
+		// passc = System.console().readPassword();
+		// pass = String.valueOf(passc);
 		// Sanitize DB args
 		if (!CheckArg.checkArgValid(next)) {
 			System.out.println("Invalid character in username.  ' ; --  not allowed.");
