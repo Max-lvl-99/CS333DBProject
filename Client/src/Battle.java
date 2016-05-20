@@ -6,7 +6,10 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+<<<<<<< HEAD
 //import org.apache.commons.lang.math.NumberUtils;
+=======
+>>>>>>> parent of ec25026... Just kidding, you cannot quite heal from a battle. going to have to modify a lot of stuff :(
 
 public class Battle {
 	Player p;
@@ -123,9 +126,17 @@ public class Battle {
 		cs.registerOutParameter(4, Types.FLOAT);
 		cs.execute();
 		float f = cs.getFloat(3);
+<<<<<<< HEAD
 		if (i < 5) {
 			p.heal(f);
 		} else if (cs.getInt(2) <= Integer.MAX_VALUE) {
+=======
+		if(cs.getInt(2) < 5){
+			System.out.println("dsafjlkdsajfljdsaf;ljdsa;lfjdsaf;ljdsa;lfj;ldsaf");
+			p.heal(cs.getInt(2));
+		}
+		else {
+>>>>>>> parent of ec25026... Just kidding, you cannot quite heal from a battle. going to have to modify a lot of stuff :(
 			HashMap<Integer, Integer> displayNumToItID = new HashMap<Integer, Integer>();
 			displayNumToItID = displayPoisons(displayNumToItID);
 			System.out.println("Enter the number that corresponds to the poison you want to use: (e to exit)");
@@ -150,8 +161,11 @@ public class Battle {
 				return;
 			}
 			applyPoison(displayNumToItID.get(pNum), displayNumToWeID.get(wNum));
+<<<<<<< HEAD
 		} else {
 			System.out.println("Invalid input");
+=======
+>>>>>>> parent of ec25026... Just kidding, you cannot quite heal from a battle. going to have to modify a lot of stuff :(
 		}
 	}
 
