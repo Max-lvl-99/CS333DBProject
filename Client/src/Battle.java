@@ -57,7 +57,7 @@ public class Battle {
 				j = false;
 			}
 			else {
-				CallableStatement cs = con.prepareCall("{call getAttackandDamage(?,?,?)}");
+				CallableStatement cs = con.prepareCall("{call getAttackDamage(?,?,?)}");
 				cs.setString(1, wep);
 				cs.registerOutParameter(2, Types.VARCHAR);
 				cs.registerOutParameter(3, Types.REAL);
@@ -92,13 +92,14 @@ public class Battle {
 		}
 		System.out.println("Choose your weapon.");
 		int i = scan.nextInt();
-		CallableStatement cs = con.prepareCall("{call getAttackandDamage(?,?,?)}");
-		cs.setString(1, d.get(i));
-		cs.registerOutParameter(2, Types.VARCHAR);
-		cs.registerOutParameter(3, Types.REAL);
+		CallableStatement cs = con.prepareCall("{call getAttackandDamage(?,?,?,?)}");
+		cs.setInt(1, p.chID);
+		cs.setString(2, d.get(i));
+		cs.registerOutParameter(3, Types.VARCHAR);
+		cs.registerOutParameter(4, Types.REAL);
 		cs.execute();
-		System.out.println("You used " + cs.getString(2));
-		float f = Float.parseFloat(cs.getString(3));
+		System.out.println("You used " + cs.getString(3));
+		float f = Float.parseFloat(cs.getString(4));
 		cs.close();
 		e.reduceHP(f);
 		
