@@ -137,12 +137,10 @@ public class Scenario {
 	public static Scenario create(int progress, int floor) throws SQLException {
 		ArrayList<Character> c = new ArrayList<Character>();
 		int i = (int) (Math.random() * 4);
-		System.out.println(i);
 		c.add('l');
 		c.add('f');
 		c.add('r');
 		c.add('b');
-		System.out.println(c.get(i));
 		Scenario newScen;
 		Scenario scen;
 		if (progress > 1) {
@@ -174,7 +172,6 @@ public class Scenario {
 	public static Scenario create(int progress, int floor, char action) throws SQLException {
 		ArrayList<Character> c = new ArrayList<Character>();
 		int i = (int) (Math.random() * 3);
-		System.out.println(i);
 		if(!(action == 'r')){
 			c.add('l');
 		}
@@ -187,7 +184,6 @@ public class Scenario {
 		if(!(action == 'f')){
 			c.add('b');
 		}
-		System.out.println(c.get(i));
 		Scenario newScen;
 		Scenario scen;
 		if (progress > 1) {

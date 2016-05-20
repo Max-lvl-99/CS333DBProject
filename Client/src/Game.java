@@ -106,6 +106,8 @@ public class Game {
 			System.out.println("Press f to move forward to the next room.  ");
 		else if (c.equals('p'))
 			System.out.println("Press p to poison a weapon.  ");
+		else if (c.equals('n'))
+			System.out.println("Press n to use the elevator.  ");
 		else if (c.equals('s'))
 			if (showExplanations)
 				System.out.println("Press s to hide these explanations.  ");
@@ -116,7 +118,7 @@ public class Game {
 		else if (c.equals('r'))
 			System.out.println("Press r to move to the room that's right of this room.  ");
 		else if (c.equals('b'))
-			System.out.println("Press b to go back to the room you came from. ");
+			System.out.println("Press b to go to the room behind this room. ");
 		else if (c.equals('h'))
 			System.out.println("Press h to see the help screen.  ");
 		else if (c.equals('e'))
@@ -555,6 +557,10 @@ public class Game {
 			System.out.println("This is the help function");
 			break;
 		case "0":
+			if(current.interactibles.size()<1){
+				System.out.println("This item does not exist.");
+				break;
+			}
 			if (current.interactibles.get(0).type == 0) {
 				cs = con.prepareCall("{call get_Item_Name(?,?)}");
 			} else {
@@ -567,6 +573,10 @@ public class Game {
 			System.out.println(b);
 			break;
 		case "1":
+			if(current.interactibles.size()<2){
+				System.out.println("This item does not exist.");
+				break;
+			}
 			if (current.interactibles.get(1).type == 0) {
 				cs = con.prepareCall("{call get_Item_Name(?,?)}");
 			} else {
@@ -579,6 +589,10 @@ public class Game {
 			System.out.println(b);
 			break;
 		case "2":
+			if(current.interactibles.size()<3){
+				System.out.println("This item does not exist.");
+				break;
+			}
 			if (current.interactibles.get(2).type == 0) {
 				cs = con.prepareCall("{call get_Item_Name(?,?)}");
 			} else {
@@ -592,10 +606,21 @@ public class Game {
 			break;
 
 		case "3":
+			if(current.enemies.size()<1){
+				System.out.println("This enemy does not exist.");
+				break;
+			}
 			System.out.println(current.enemies.get(0).name);
 			break;
 		case "4":
+			if(current.enemies.size()<2){
+				System.out.println("This enemy does not exist.");
+				break;
+			}
 			System.out.println(current.enemies.get(1).name);
+			break;
+		case "n":
+			System.out.println("This represents an elevator");
 			break;
 		}
 	}
