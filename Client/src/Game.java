@@ -225,13 +225,11 @@ public class Game {
 			System.out.println(i + " items added!");
 			break;
 		case "u":
-			
-			
-			
+
 			System.out.println("You currently own: ");
 			int count = 0;
 			ArrayList<String> d = character.getItems();
-			for(String character : d){
+			for (String character : d) {
 				System.out.println(count + " " + c);
 				count++;
 			}
@@ -243,10 +241,9 @@ public class Game {
 			cs.registerOutParameter(3, Types.FLOAT);
 			cs.execute();
 			float f = cs.getFloat(3);
-			if(i1 < 5){
+			if (i1 < 5) {
 				character.heal(f);
-			}
-			else {
+			} else {
 				HashMap<Integer, Integer> displayNumToItID = new HashMap<Integer, Integer>();
 				displayNumToItID = displayPoisons(displayNumToItID);
 				System.out.println("Enter the number that corresponds to the poison you want to use: (e to exit)");
@@ -273,13 +270,8 @@ public class Game {
 				applyPoison(displayNumToItID.get(pNum), displayNumToWeID.get(wNum));
 			}
 			break;
-		
-			
-			
-			
-			
-			
-			// TODO: Next Milestone -- Use items
+
+		// TODO: Next Milestone -- Use items
 		case "z":
 			sql = "{call [saveState] (?,?,?,?)}";
 			stmt = con.prepareCall(sql);
@@ -410,7 +402,9 @@ public class Game {
 			str.append(res.getString(1));
 			str.append(" (");
 			str.append(res.getString(2));
-			str.append("); ");
+			str.append(") ");
+			System.out.println(str.toString());
+			str = new StringBuilder();
 		}
 		// sql = "{call [Display Inventory2] (?)}";
 		// stmt = con.prepareCall(sql);
@@ -422,7 +416,6 @@ public class Game {
 		// str.append(res.getString(2));
 		// str.append("); ");
 		// }
-		System.out.println(str.toString());
 	}
 
 	private HashMap<Integer, Integer> displayPoisons(HashMap<Integer, Integer> displayNumToItID) throws SQLException {

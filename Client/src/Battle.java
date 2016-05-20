@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Scanner;
 //import org.apache.commons.lang.math.NumberUtils;
 
-
 public class Battle {
 	Player p;
 	Enemy e;
@@ -17,9 +16,10 @@ public class Battle {
 	Scanner scan;
 	ArrayList<Float> r;
 	String wep;
-	public Battle(Player c, Enemy b) throws SQLException{
+
+	public Battle(Player c, Enemy b) throws SQLException {
 		p = c;
-		e=b;
+		e = b;
 		System.out.println("You are fighting: " + b.name);
 		this.con = ConnectURL.makeConnection();
 		CallableStatement cs = con.prepareCall("{call get_Weapon_Name(?,?)}");
@@ -36,29 +36,27 @@ public class Battle {
 		r.add((float) 1);
 		main();
 	}
-	public void main() throws SQLException{
+
+	public void main() throws SQLException {
 		boolean j = true;
-		while(j){
+		while (j) {
 			System.out.println(e.name + " has " + e.reduceHP(0) + " HP.");
-			System.out.println("You have " + p.getHP() + " HP." );
+			System.out.println("You have " + p.getHP() + " HP.");
 			System.out.println("What would you like to do?");
 			System.out.println("(a)ttack, (i)tem, (f)lee");
 			String c = scan.next();
-			if(c == "f"){
+			if (c == "f") {
 				b = 2;
 				j = false;
-			}
-			else if(c.equals("a")){
+			} else if (c.equals("a")) {
 				handleWeapons();
-			}
-			else {
+			} else {
 				handleItems();
 			}
-			
-			if(e.reduceHP(0)<=0){
+
+			if (e.reduceHP(0) <= 0) {
 				j = false;
-			}
-			else {
+			} else {
 				CallableStatement cs = con.prepareCall("{call getAttackandDamage(?,?,?)}");
 				cs.setString(1, wep);
 				cs.registerOutParameter(2, Types.VARCHAR);
@@ -68,32 +66,34 @@ public class Battle {
 				float f = Float.parseFloat(cs.getString(3));
 				p.reduceHP(f);
 			}
-			if(p.getHP()<=0){
-				b=1;
-				j=false;
+			if (p.getHP() <= 0) {
+				b = 1;
+				j = false;
 			}
 		}
-		if(b==2){
+		if (b == 2) {
 			System.out.println("You fled the battle.");
 		}
-		if(b==1){
+		if (b == 1) {
 			System.out.println("You are defeated.");
 		}
-		if(b==0){
+		if (b == 0) {
 			System.out.println("You are victorious");
-			System.out.println("You have gained " + e.maxHP()+ " XP.");
+			System.out.println("You have gained " + e.maxHP() + " XP.");
 		}
 	}
-	public void handleWeapons() throws SQLException{
+
+	public void handleWeapons() throws SQLException {
 		System.out.println("You currently own: ");
 		int count = 0;
 		ArrayList<String> d = p.getWeapons();
-		for(String c: d){
+		for (String c : d) {
 			System.out.println(count + " " + c);
 			count++;
 		}
 		System.out.println("Choose your weapon.");
 		int i = scan.nextInt();
+		System.out.println("i: " + i + "d: " + d);
 		CallableStatement cs = con.prepareCall("{call getAttackandDamage(?,?,?)}");
 		cs.setString(1, d.get(i));
 		cs.registerOutParameter(2, Types.VARCHAR);
@@ -103,28 +103,29 @@ public class Battle {
 		float f = Float.parseFloat(cs.getString(3));
 		cs.close();
 		e.reduceHP(f);
-		
+
 	}
-	public void handleItems() throws SQLException{
+
+	public void handleItems() throws SQLException {
 		System.out.println("You currently own: ");
 		int count = 0;
 		ArrayList<String> d = p.getItems();
-		for(String c: d){
+		for (String c : d) {
 			System.out.println(count + " " + c);
 			count++;
 		}
 		System.out.println("Choose your item.");
 		int i = scan.nextInt();
-		CallableStatement cs = con.prepareCall("{call getTypeandPotency(?,?,?)}");
+		CallableStatement cs = con.prepareCall("{call getTypeandPotency(?, ?, ?,?)}");
 		cs.setString(1, d.get(i));
-		cs.registerOutParameter(2, Types.INTEGER);
-		cs.registerOutParameter(3, Types.FLOAT);
+		cs.setInt(2, this.p.getInID());
+		cs.registerOutParameter(3, Types.INTEGER);
+		cs.registerOutParameter(4, Types.FLOAT);
 		cs.execute();
 		float f = cs.getFloat(3);
-		if(i < 5){
+		if (i < 5) {
 			p.heal(f);
-		}
-		else if(cs.getInt(2) <= Integer.MAX_VALUE){
+		} else if (cs.getInt(2) <= Integer.MAX_VALUE) {
 			HashMap<Integer, Integer> displayNumToItID = new HashMap<Integer, Integer>();
 			displayNumToItID = displayPoisons(displayNumToItID);
 			System.out.println("Enter the number that corresponds to the poison you want to use: (e to exit)");
@@ -149,11 +150,11 @@ public class Battle {
 				return;
 			}
 			applyPoison(displayNumToItID.get(pNum), displayNumToWeID.get(wNum));
-		}
-		else{
+		} else {
 			System.out.println("Invalid input");
 		}
 	}
+
 	private HashMap<Integer, Integer> displayWeapons(HashMap<Integer, Integer> displayNumToWeID) throws SQLException {
 		String sql = "{call displayWeapons (?)}";
 		CallableStatement stmt;
@@ -192,6 +193,7 @@ public class Battle {
 		System.out.println(str.toString());
 		return displayNumToWeID;
 	}
+
 	private void applyPoison(Integer ItID, Integer WeID) throws SQLException {
 		String sql = "{? = call applyPoison (?, ?, ?, ?)}";
 		CallableStatement stmt;
@@ -208,6 +210,7 @@ public class Battle {
 		else
 			System.out.println("Weapon poison cannot poison this type of weapon");
 	}
+
 	private HashMap<Integer, Integer> displayPoisons(HashMap<Integer, Integer> displayNumToItID) throws SQLException {
 		String sql = "{call displayPoisons (?)}";
 		CallableStatement stmt = con.prepareCall(sql);
@@ -229,5 +232,4 @@ public class Battle {
 		return displayNumToItID;
 	}
 
-	
 }

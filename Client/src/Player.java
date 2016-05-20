@@ -105,7 +105,7 @@ public class Player {
 
 	public void heal(float heal) throws SQLException {
 		float hP = getHP() + maxHP * heal;
-//		System.out.println(heal);
+		// System.out.println(heal);
 		if (maxHP < hP) {
 			hP = maxHP;
 		}
@@ -136,13 +136,13 @@ public class Player {
 
 	public ArrayList<String> getItems() throws SQLException {
 		ArrayList<String> items = new ArrayList<String>();
-		stmt = con.prepareCall("{call getItems(?)}");
+		stmt = con.prepareCall("{call [Display Inventory] (?)}");
 		stmt.setInt(1, getInID());
 		boolean b = stmt.execute();
 		while (b) {
 			ResultSet rs = stmt.getResultSet();
 			while (rs.next()) {
-				items.add(rs.getString("ItName"));
+				items.add(rs.getString(1));
 			}
 			rs.close();
 			b = stmt.getMoreResults();
