@@ -238,8 +238,8 @@ public class Scenario {
 			actions.add('f');
 		actions.add('i');
 		actions.add('p');
-//		actions.add('d');
-		 actions.add('u'); //next milestone
+		actions.add('d');
+		// actions.add('u'); next milestone
 		actions.add('z'); // save state of game
 		actions.add('e');
 		int count = 0;
