@@ -4,12 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
-<<<<<<< HEAD
+import java.util.HashMap;import java.util.Scanner;<<<<<<<HEAD
 //import org.apache.commons.lang.math.NumberUtils;
-=======
->>>>>>> parent of ec25026... Just kidding, you cannot quite heal from a battle. going to have to modify a lot of stuff :(
+=======>>>>>>>parent of ec25026...Just kidding,you cannot quite heal from a battle.going to have to modify a lot of stuff:(
 
 public class Battle {
 	Player p;
