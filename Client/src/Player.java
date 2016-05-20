@@ -20,8 +20,6 @@ public class Player {
 	private String weaponName;
 	private String weaponPoison;
 	private float maxWeaponDmg;
-	private String userName;
-	private String chName;
 	// con must be used to access DB
 	Connection con;
 	// CallableStatement is used for stored procedures
@@ -33,9 +31,7 @@ public class Player {
 		String sql = "{call getUserCharacter (?, ?)}";
 		stmt = con.prepareCall(sql);
 		stmt.setString(1, username);
-		this.userName = username;
 		stmt.setString(2, chName);
-		this.chName = chName;
 		ResultSet res = stmt.executeQuery();
 		// Use res.getString to get columns from returned row
 		// 1: Actual_hp 2: Base_HP 3: Exp 4: Floor 5: Room
@@ -109,7 +105,7 @@ public class Player {
 
 	public void heal(float heal) throws SQLException {
 		float hP = getHP() + maxHP * heal;
-		// System.out.println(heal);
+//		System.out.println(heal);
 		if (maxHP < hP) {
 			hP = maxHP;
 		}
@@ -189,18 +185,6 @@ public class Player {
 
 	public void setInID(int inID) {
 		this.inID = inID;
-	}
-
-	public String getUser() {
-		return this.userName;
-	}
-
-	public String getName() {
-		return this.chName;
-	}
-
-	public float getXP() {
-		return this.exp;
 	}
 
 }
