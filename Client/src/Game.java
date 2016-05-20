@@ -236,12 +236,11 @@ public class Game {
 			System.out.println("You currently own: ");
 			int count = 0;
 			ArrayList<String> d = character.getItems();
-			for (String character : d) {
 				System.out.println(count + " " + c);
 				count++;
 			}
 			System.out.println("Choose your item.");
-			int i1 = scan.nextInt();
+
 
 			CallableStatement cs = con.prepareCall("{call getTypeandPotency(?,?,?)}");
 			cs.setString(1, d.get(i1));
@@ -430,6 +429,7 @@ public class Game {
 			}
 			break;
 		}
+
 	}
 
 	private void displayInventory() throws SQLException {
