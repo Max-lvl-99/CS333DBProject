@@ -258,6 +258,10 @@ public class Game {
 			poisonWeapon();
 			break;
 		case "0":
+			if(current.interactibles.size()==0){
+				System.out.println("This item does not exist");
+				break;
+			}
 			if (current.interactibles.get(0).type == 0) {
 				character.insertIntoInventory(current.interactibles.get(0).id, "I");
 			} else {
@@ -268,6 +272,10 @@ public class Game {
 			current.interactibles.remove(0);
 			break;
 		case "1":
+			if(current.interactibles.size()<2){
+				System.out.println("This item does not exist");
+				break;
+			}
 			if (current.interactibles.get(1).type == 0) {
 				character.insertIntoInventory(current.interactibles.get(1).id, "I");
 			} else {
@@ -278,6 +286,10 @@ public class Game {
 			current.interactibles.remove(1);
 			break;
 		case "2":
+			if(current.interactibles.size()<3){
+				System.out.println("This item does not exist.");
+				break;
+			}
 			if (current.interactibles.get(2).type == 0) {
 				character.insertIntoInventory(current.interactibles.get(2).id, "I");
 			} else {
@@ -288,6 +300,10 @@ public class Game {
 			current.interactibles.remove(2);
 			break;
 		case "3":
+			if(current.enemies.size()<1){
+				System.out.println("This enemy does not exist.");
+				break;
+			}
 			new Battle(character, current.enemies.get(0));
 			if (character.getHP() <= 0) {
 				System.out.println("Starting from checkpoint.");
@@ -300,6 +316,10 @@ public class Game {
 			}
 			break;
 		case "4":
+			if(current.enemies.size()<2){
+				System.out.println("This enemy does not exist.");
+				break;
+			}
 			new Battle(character, current.enemies.get(1));
 			if (character.getHP() <= 0) {
 				System.out.println("Starting from checkpoint.");
@@ -340,6 +360,15 @@ public class Game {
 					}
 				} else {
 					if (current.up) {
+						if(floor == 10){
+							System.out.println("You have won the game!");
+							System.out.println("Never again can you play this character!");
+							stmt = con.prepareCall("{call deleteChar(?)}");
+							stmt.setInt(1, character.chID);
+							stmt.execute();
+							Main.main(null);
+							System.exit(0);
+						}
 						if (current.upScen != null) {
 							current = current.upScen;
 							floor++;
