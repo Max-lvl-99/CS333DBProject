@@ -63,8 +63,7 @@ public class Battle {
 				cs.registerOutParameter(3, Types.REAL);
 				cs.execute();
 				System.out.println(e.name + " used " + cs.getString(2));
-				float f = Float.parseFloat(cs.getString(3));
-				p.reduceHP(f);
+				p.reduceHP(e.maxDamage());
 			}
 			if(p.getHP()<=0){
 				b=1;
@@ -80,6 +79,8 @@ public class Battle {
 		if(b==0){
 			System.out.println("You are victorious");
 			System.out.println("You have gained " + e.maxHP()+ " XP.");
+			p.setXP(e.maxHP());
+			p.setLevel();
 		}
 	}
 	public void handleWeapons() throws SQLException{
@@ -101,7 +102,7 @@ public class Battle {
 		System.out.println("You used " + cs.getString(3));
 		float f = Float.parseFloat(cs.getString(4));
 		cs.close();
-		e.reduceHP(f);
+		e.reduceHP(f*p.getMult());
 		
 	}
 	public void handleItems() throws SQLException{
@@ -120,7 +121,7 @@ public class Battle {
 		cs.registerOutParameter(3, Types.FLOAT);
 		cs.execute();
 		float f = cs.getFloat(3);
-		if(cs.getInt(2) < 5){
+		if(cs.getInt(2) !=0){
 			System.out.println("dsafjlkdsajfljdsaf;ljdsa;lfjdsaf;ljdsa;lfj;ldsaf");
 			p.heal(cs.getInt(2));
 		}

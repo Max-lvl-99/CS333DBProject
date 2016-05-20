@@ -9,8 +9,10 @@ public class Player {
 	private float baseHP;
 	// maxHP is calculated client-side by multiplying baseHP and hpMult
 	private float maxHP;
+	private float actualHP;
 	// private float actualHP;
 	private float exp;
+	private int level;
 	private int floor;
 	private int room;
 	int chID;
@@ -20,6 +22,8 @@ public class Player {
 	private String weaponName;
 	private String weaponPoison;
 	private float maxWeaponDmg;
+	private String name;
+	private String user;
 	// con must be used to access DB
 	Connection con;
 	// CallableStatement is used for stored procedures
@@ -27,6 +31,8 @@ public class Player {
 
 	public Player(String username, String chName) throws SQLException {
 		// Make the connection to SQL Server for queries.
+		user = username;
+		name = chName;
 		this.con = ConnectURL.makeConnection();
 		String sql = "{call getUserCharacter (?, ?)}";
 		stmt = con.prepareCall(sql);
@@ -37,7 +43,7 @@ public class Player {
 		// 1: Actual_hp 2: Base_HP 3: Exp 4: Floor 5: Room
 		// 6: ChID 7: InID
 		while (res.next()) {
-			// this.actualHP = Float.parseFloat(res.getString(1));
+			this.actualHP = Float.parseFloat(res.getString(1));
 			this.baseHP = Float.parseFloat(res.getString(2));
 			this.exp = Float.parseFloat(res.getString(3));
 			this.floor = Integer.parseInt(res.getString(4));
@@ -45,6 +51,7 @@ public class Player {
 			this.chID = Integer.parseInt(res.getString(6));
 			this.setInID(Integer.parseInt(res.getString(7)));
 		}
+		setLevel();
 
 		// sql = "{call InsertIntoInventory (?, ?, ?)}";
 		//
@@ -57,20 +64,6 @@ public class Player {
 		// sql = "{call InsertIntoInventory (inID, 2)}";
 		// stmt = con.prepareCall(sql);
 		// stmt.executeQuery();
-
-		sql = "{call getMultipliersExp (?)}";
-		stmt = con.prepareCall(sql);
-		stmt.setString(1, Float.toString(this.exp));
-		res = stmt.executeQuery();
-		while (res.next()) {
-			this.dmgMult = Float.parseFloat(res.getString(1));
-			this.hpMult = Float.parseFloat(res.getString(2));
-		}
-		this.maxHP = this.baseHP * this.hpMult;
-		stmt = con.prepareCall("{call setHP(?,?)}");
-		stmt.setInt(1, chID);
-		stmt.setFloat(2, maxHP);
-		stmt.execute();
 	}
 
 	public void insertIntoInventory(int id, String type) throws SQLException {
@@ -88,19 +81,11 @@ public class Player {
 	}
 
 	public float getHP() throws SQLException {
-		CallableStatement cs = con.prepareCall("{call getHP(?, ?)}");
-		cs.setInt(1, chID);
-		cs.registerOutParameter(2, Types.REAL);
-		cs.execute();
-		return Float.parseFloat(cs.getString(2));
+		return ((float) Math.round(actualHP*100))/100;
 	}
 
 	public void reduceHP(float damage) throws SQLException {
-		stmt = con.prepareCall("{call setHP(?,?)}");
-		stmt.setInt(1, chID);
-		System.out.println(getHP() - damage);
-		stmt.setFloat(2, getHP() - damage);
-		stmt.execute();
+		actualHP = actualHP-damage;
 	}
 
 	public void heal(float heal) throws SQLException {
@@ -110,11 +95,7 @@ public class Player {
 			hP = maxHP;
 		}
 //		System.out.println(hP);
-		stmt = con.prepareCall("{call setHP(?,?)}");
-		stmt.setInt(1, chID);
-		stmt.setFloat(2, hP);
-		stmt.execute();
-		this.getHP();
+		actualHP = hP;
 	}
 
 	public ArrayList<String> getWeapons() throws SQLException {
@@ -185,6 +166,56 @@ public class Player {
 
 	public void setInID(int inID) {
 		this.inID = inID;
+	}
+	
+	public void setLevel() throws SQLException {
+		stmt = con.prepareCall("{call getLevel(?,?,?)}");
+		stmt.setInt(1, chID);
+		stmt.setFloat(2, exp);
+		stmt.registerOutParameter(3, Types.INTEGER);
+		stmt.execute();
+		level = stmt.getInt(3);
+		System.out.println(level);
+		String sql = "{call getMultipliersLvl (?)}";
+		stmt = con.prepareCall(sql);
+		stmt.setInt(1, this.level);
+		ResultSet res = stmt.executeQuery();
+		while (res.next()) {
+			this.dmgMult = Float.parseFloat(res.getString(1));
+			this.hpMult = Float.parseFloat(res.getString(2));
+		}
+		this.maxHP = this.baseHP * this.hpMult;
+		System.out.println(dmgMult + " " + hpMult + " " + maxHP);
+	}
+	
+	public float getXP() {
+		return exp;
+	}
+	
+	public void setXP(float f) {
+		exp+=f;
+	}
+	
+	public float getMult(){
+		return dmgMult;
+	}
+
+	
+	public void setHP(float hp) throws SQLException{
+		stmt = con.prepareCall("{call setHP(?,?)}");
+		stmt.setInt(1, chID);
+		System.out.println(hp);
+		stmt.setFloat(2, hp);
+		stmt.execute();
+	}
+	
+	public String getName(){
+		return name;
+		
+	}
+	
+	public String getUser(){
+		return user;
 	}
 
 }

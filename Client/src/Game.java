@@ -38,6 +38,7 @@ public class Game {
 		current = checkpoint;
 		floor = 1;
 		progress = 0;
+		
 
 		main();
 	}
@@ -49,6 +50,7 @@ public class Game {
 			
 			current = Scenario.create(progress, floor);
 		}
+		checkpoint = current;
 		while (true) {
 			act = getActions();
 			System.out.println("Health: " + this.character.getHP() + "/" + this.character.getMaxHP() + " Floor: "
@@ -238,17 +240,19 @@ public class Game {
 			
 			// TODO: Next Milestone -- Use items
 		case "z":
-			sql = "{call [saveState] (?,?,?,?)}";
+			sql = "{call [saveState] (?,?,?,?,?)}";
 			stmt = con.prepareCall(sql);
 
 			stmt.setInt(1, character.getChID()); // ChID
 			stmt.setInt(2, floor); // floor
 			stmt.setInt(3, progress); // room
-			stmt.setInt(4, 100); // temp for actualHP
+			stmt.setFloat(4, character.getHP()); // temp for actualHP
+			stmt.setFloat(5, character.getXP());
 			// stmt.setFloat(4, character.actualHP); //actualHP, which is
 			// currently commented out, I dont know why
 			stmt.executeUpdate();
 			System.out.println("Game Saved");
+			checkpoint = current;
 			break;
 		case "p":
 			poisonWeapon();
@@ -288,8 +292,9 @@ public class Game {
 			if (character.getHP() <= 0) {
 				System.out.println("Starting from checkpoint.");
 				current = checkpoint;
+				character = new Player(character.getUser(), character.getName());
 			}
-			if (current.enemies.get(0).reduceHP(0) <= 0) {
+			else if (current.enemies.get(0).reduceHP(0) <= 0) {
 				current.enemies.remove(0);
 				current.numberofEnemies--;
 			}
@@ -299,6 +304,7 @@ public class Game {
 			if (character.getHP() <= 0) {
 				System.out.println("Starting from checkpoint.");
 				current = checkpoint;
+				character = new Player(character.getUser(), character.getName());
 			}
 			if (current.enemies.get(1).reduceHP(0) <= 0) {
 				current.enemies.remove(1);
