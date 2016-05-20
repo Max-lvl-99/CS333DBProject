@@ -41,6 +41,16 @@ public class Scenario {
 			prevScen.leftScen = this;
 			if (!(left || back || forward)) {
 				deadend = true;
+				int i = (int) (Math.random()*3);
+				if(i ==0){
+					left = true;
+				}
+				else if(i ==1){
+					back = true;
+				}
+				else if(i ==2){
+					forward = true;
+				}
 			}
 			break;
 		case 'r':
@@ -49,6 +59,16 @@ public class Scenario {
 			prevScen.rightScen = this;
 			if (!(right || back || forward)) {
 				deadend = true;
+				int i = (int) (Math.random()*3);
+				if(i ==0){
+					right = true;
+				}
+				else if(i ==1){
+					back = true;
+				}
+				else if(i ==2){
+					forward = true;
+				}
 			}
 			break;
 		case 'f':
@@ -57,6 +77,16 @@ public class Scenario {
 			prevScen.forwardScen = this;
 			if (!(left || right || forward)) {
 				deadend = true;
+				int i = (int) (Math.random()*3);
+				if(i ==0){
+					left = true;
+				}
+				else if(i ==1){
+					right = true;
+				}
+				else if(i ==2){
+					forward = true;
+				}
 			}
 			break;
 		case 'b':
@@ -65,6 +95,16 @@ public class Scenario {
 			prevScen.backScen = this;
 			if (!(left || back || right)) {
 				deadend = true;
+				int i = (int) (Math.random()*3);
+				if(i ==0){
+					left = true;
+				}
+				else if(i ==1){
+					back = true;
+				}
+				else if(i ==2){
+					right = true;
+				}
 			}
 			break;
 		}
@@ -96,16 +136,81 @@ public class Scenario {
 
 	public static Scenario create(int progress, int floor) throws SQLException {
 		ArrayList<Character> c = new ArrayList<Character>();
-		int i = (int) Math.random() * 4;
+		int i = (int) (Math.random() * 4);
 		c.add('l');
-		c.add('r');
 		c.add('f');
+		c.add('r');
 		c.add('b');
+		Scenario newScen;
+		Scenario scen;
 		if (progress > 1) {
-			return new Scenario(progress, floor, c.get(i), Scenario.create(progress - 1, floor));
+			newScen = Scenario.create(progress -1, floor, c.get(i));			
 		} else {
-			return new Scenario(progress, floor, c.get(i), new Scenario(progress - 1, floor));
+			newScen = new Scenario(progress -1, floor);
 		}
+		scen = new Scenario(progress, floor, c.get(i), newScen);
+		switch(i) {
+		case 0:
+			newScen.leftScen = scen;
+			newScen.left = true;
+			break;
+		case 1:
+			newScen.forwardScen = scen;
+			newScen.forward = true;
+			break;
+		case 2:
+			newScen.rightScen = scen;
+			newScen.right = true;
+			break;
+		case 3:
+			newScen.backScen = scen;
+			newScen.back = true;
+			break;
+		}
+		return scen;
+	}
+	public static Scenario create(int progress, int floor, char action) throws SQLException {
+		ArrayList<Character> c = new ArrayList<Character>();
+		int i = (int) (Math.random() * 3);
+		if(!(action == 'r')){
+			c.add('l');
+		}
+		if(!(action == 'b')){
+			c.add('f');
+		}
+		if(!(action == 'l')){
+			c.add('r');
+		}
+		if(!(action == 'f')){
+			c.add('b');
+		}
+		Scenario newScen;
+		Scenario scen;
+		if (progress > 1) {
+			newScen = Scenario.create(progress -1, floor, c.get(i));			
+		} else {
+			newScen = new Scenario(progress -1, floor);
+		}
+		scen = new Scenario(progress, floor, c.get(i), newScen);
+		switch(c.get(i)) {
+		case 'l':
+			newScen.leftScen = scen;
+			newScen.left = true;
+			break;
+		case 'f':
+			newScen.forwardScen = scen;
+			newScen.forward = true;
+			break;
+		case 'r':
+			newScen.rightScen = scen;
+			newScen.right = true;
+			break;
+		case 'b':
+			newScen.backScen = scen;
+			newScen.back = true;
+			break;
+		}
+		return scen;
 	}
 
 	public Scenario(int progress, int floor) {

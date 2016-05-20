@@ -57,10 +57,13 @@ public class Enemy {
 	}
 	public float reduceHP(float a){
 		hP = hP - a;
-		return hP;
+		return ((float)Math.round(hP*100))/100;
 	}
 	public float maxHP(){
 		return maxHP;
+	}
+	public float maxDamage(){
+		return maxWeaponDmg;
 	}
 
 }

@@ -38,6 +38,7 @@ public class Game {
 		current = checkpoint;
 		floor = 1;
 		progress = 0;
+		
 
 		main();
 	}
@@ -45,6 +46,11 @@ public class Game {
 	public void main() throws SQLException {
 		floor = character.getFloor();
 		progress = character.getRoom();
+		if(progress!=0){
+			
+			current = Scenario.create(progress, floor);
+		}
+		checkpoint = current;
 		while (true) {
 			act = getActions();
 			System.out.println("Health: " + this.character.getHP() + "/" + this.character.getMaxHP() + " Floor: "
@@ -100,6 +106,8 @@ public class Game {
 			System.out.println("Press f to move forward to the next room.  ");
 		else if (c.equals('p'))
 			System.out.println("Press p to poison a weapon.  ");
+		else if (c.equals('n'))
+			System.out.println("Press n to use the elevator.  ");
 		else if (c.equals('s'))
 			if (showExplanations)
 				System.out.println("Press s to hide these explanations.  ");
@@ -110,7 +118,7 @@ public class Game {
 		else if (c.equals('r'))
 			System.out.println("Press r to move to the room that's right of this room.  ");
 		else if (c.equals('b'))
-			System.out.println("Press b to go back to the room you came from. ");
+			System.out.println("Press b to go to the room behind this room. ");
 		else if (c.equals('h'))
 			System.out.println("Press h to see the help screen.  ");
 		else if (c.equals('e'))
@@ -286,22 +294,28 @@ public class Game {
 			
 			// TODO: Next Milestone -- Use items
 		case "z":
-			sql = "{call [saveState] (?,?,?,?)}";
+			sql = "{call [saveState] (?,?,?,?,?)}";
 			stmt = con.prepareCall(sql);
 
 			stmt.setInt(1, character.getChID()); // ChID
 			stmt.setInt(2, floor); // floor
 			stmt.setInt(3, progress); // room
-			stmt.setInt(4, 100); // temp for actualHP
+			stmt.setFloat(4, character.getHP()); // temp for actualHP
+			stmt.setFloat(5, character.getXP());
 			// stmt.setFloat(4, character.actualHP); //actualHP, which is
 			// currently commented out, I dont know why
 			stmt.executeUpdate();
 			System.out.println("Game Saved");
+			checkpoint = current;
 			break;
 		case "p":
 			poisonWeapon();
 			break;
 		case "0":
+			if(current.interactibles.size()==0){
+				System.out.println("This item does not exist");
+				break;
+			}
 			if (current.interactibles.get(0).type == 0) {
 				character.insertIntoInventory(current.interactibles.get(0).id, "I");
 			} else {
@@ -312,6 +326,10 @@ public class Game {
 			current.interactibles.remove(0);
 			break;
 		case "1":
+			if(current.interactibles.size()<2){
+				System.out.println("This item does not exist");
+				break;
+			}
 			if (current.interactibles.get(1).type == 0) {
 				character.insertIntoInventory(current.interactibles.get(1).id, "I");
 			} else {
@@ -322,6 +340,10 @@ public class Game {
 			current.interactibles.remove(1);
 			break;
 		case "2":
+			if(current.interactibles.size()<3){
+				System.out.println("This item does not exist.");
+				break;
+			}
 			if (current.interactibles.get(2).type == 0) {
 				character.insertIntoInventory(current.interactibles.get(2).id, "I");
 			} else {
@@ -332,21 +354,31 @@ public class Game {
 			current.interactibles.remove(2);
 			break;
 		case "3":
+			if(current.enemies.size()<1){
+				System.out.println("This enemy does not exist.");
+				break;
+			}
 			new Battle(character, current.enemies.get(0));
 			if (character.getHP() <= 0) {
 				System.out.println("Starting from checkpoint.");
 				current = checkpoint;
+				character = new Player(character.getUser(), character.getName());
 			}
-			if (current.enemies.get(0).reduceHP(0) <= 0) {
+			else if (current.enemies.get(0).reduceHP(0) <= 0) {
 				current.enemies.remove(0);
 				current.numberofEnemies--;
 			}
 			break;
 		case "4":
+			if(current.enemies.size()<2){
+				System.out.println("This enemy does not exist.");
+				break;
+			}
 			new Battle(character, current.enemies.get(1));
 			if (character.getHP() <= 0) {
 				System.out.println("Starting from checkpoint.");
 				current = checkpoint;
+				character = new Player(character.getUser(), character.getName());
 			}
 			if (current.enemies.get(1).reduceHP(0) <= 0) {
 				current.enemies.remove(1);
@@ -382,6 +414,15 @@ public class Game {
 					}
 				} else {
 					if (current.up) {
+						if(floor == 10){
+							System.out.println("You have won the game!");
+							System.out.println("Never again can you play this character!");
+							stmt = con.prepareCall("{call deleteChar(?)}");
+							stmt.setInt(1, character.chID);
+							stmt.execute();
+							Main.main(null);
+							System.exit(0);
+						}
 						if (current.upScen != null) {
 							current = current.upScen;
 							floor++;
@@ -444,7 +485,7 @@ public class Game {
 			str.append(res.getString(2));
 			str.append(") ");
 			str.append("Damage increase (vs. no poison): x1" + res.getString(3).substring(1) + " for weapons of type "
-					+ res.getString(4) + ".  ");
+					+ res.getString(4) + ".  \n");
 			i++;
 			System.out.println(str.toString());
 			str = new StringBuilder();
@@ -469,7 +510,7 @@ public class Game {
 					str.append(poison);
 					str.append(", x1" + res.getString(5).substring(1) + " dmg. ");
 				}
-				str.append(" Type: " + res.getString(6));
+				str.append(" Type: " + res.getString(6)+"\n");
 				System.out.println(str.toString());
 				str = new StringBuilder();
 			}
@@ -487,7 +528,7 @@ public class Game {
 					str.append(", x1" + res.getString(5).substring(1) + " dmg. ");
 				}
 				i++;
-				str.append(" Type: " + res.getString(6));
+				str.append(" Type: " + res.getString(6) + "\n");
 				System.out.println(str.toString());
 				str = new StringBuilder();
 			}
@@ -568,6 +609,10 @@ public class Game {
 			System.out.println("This is the help function");
 			break;
 		case "0":
+			if(current.interactibles.size()<1){
+				System.out.println("This item does not exist.");
+				break;
+			}
 			if (current.interactibles.get(0).type == 0) {
 				cs = con.prepareCall("{call get_Item_Name(?,?)}");
 			} else {
@@ -580,6 +625,10 @@ public class Game {
 			System.out.println(b);
 			break;
 		case "1":
+			if(current.interactibles.size()<2){
+				System.out.println("This item does not exist.");
+				break;
+			}
 			if (current.interactibles.get(1).type == 0) {
 				cs = con.prepareCall("{call get_Item_Name(?,?)}");
 			} else {
@@ -592,6 +641,10 @@ public class Game {
 			System.out.println(b);
 			break;
 		case "2":
+			if(current.interactibles.size()<3){
+				System.out.println("This item does not exist.");
+				break;
+			}
 			if (current.interactibles.get(2).type == 0) {
 				cs = con.prepareCall("{call get_Item_Name(?,?)}");
 			} else {
@@ -605,10 +658,21 @@ public class Game {
 			break;
 
 		case "3":
+			if(current.enemies.size()<1){
+				System.out.println("This enemy does not exist.");
+				break;
+			}
 			System.out.println(current.enemies.get(0).name);
 			break;
 		case "4":
+			if(current.enemies.size()<2){
+				System.out.println("This enemy does not exist.");
+				break;
+			}
 			System.out.println(current.enemies.get(1).name);
+			break;
+		case "n":
+			System.out.println("This represents an elevator");
 			break;
 		}
 	}
