@@ -229,7 +229,11 @@ public class Game {
 			System.out.println("You currently own: ");
 			int count = 0;
 			ArrayList<String> d = character.getItems();
+<<<<<<< HEAD
 			for (String character : d) {
+=======
+			for(String character : d){
+>>>>>>> parent of 7db574b... worked on it
 				System.out.println(count + " " + c);
 				count++;
 			}
