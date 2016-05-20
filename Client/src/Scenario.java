@@ -96,16 +96,85 @@ public class Scenario {
 
 	public static Scenario create(int progress, int floor) throws SQLException {
 		ArrayList<Character> c = new ArrayList<Character>();
-		int i = (int) Math.random() * 4;
+		int i = (int) (Math.random() * 4);
+		System.out.println(i);
 		c.add('l');
-		c.add('r');
 		c.add('f');
+		c.add('r');
 		c.add('b');
+		System.out.println(c.get(i));
+		Scenario newScen;
+		Scenario scen;
 		if (progress > 1) {
-			return new Scenario(progress, floor, c.get(i), Scenario.create(progress - 1, floor));
+			newScen = Scenario.create(progress -1, floor, c.get(i));			
 		} else {
-			return new Scenario(progress, floor, c.get(i), new Scenario(progress - 1, floor));
+			newScen = new Scenario(progress -1, floor);
 		}
+		scen = new Scenario(progress, floor, c.get(i), newScen);
+		switch(i) {
+		case 0:
+			newScen.leftScen = scen;
+			newScen.left = true;
+			break;
+		case 1:
+			newScen.forwardScen = scen;
+			newScen.forward = true;
+			break;
+		case 2:
+			newScen.rightScen = scen;
+			newScen.right = true;
+			break;
+		case 3:
+			newScen.backScen = scen;
+			newScen.back = true;
+			break;
+		}
+		return scen;
+	}
+	public static Scenario create(int progress, int floor, char action) throws SQLException {
+		ArrayList<Character> c = new ArrayList<Character>();
+		int i = (int) (Math.random() * 3);
+		System.out.println(i);
+		if(!(action == 'r')){
+			c.add('l');
+		}
+		if(!(action == 'b')){
+			c.add('f');
+		}
+		if(!(action == 'l')){
+			c.add('r');
+		}
+		if(!(action == 'f')){
+			c.add('b');
+		}
+		System.out.println(c.get(i));
+		Scenario newScen;
+		Scenario scen;
+		if (progress > 1) {
+			newScen = Scenario.create(progress -1, floor, c.get(i));			
+		} else {
+			newScen = new Scenario(progress -1, floor);
+		}
+		scen = new Scenario(progress, floor, c.get(i), newScen);
+		switch(c.get(i)) {
+		case 'l':
+			newScen.leftScen = scen;
+			newScen.left = true;
+			break;
+		case 'f':
+			newScen.forwardScen = scen;
+			newScen.forward = true;
+			break;
+		case 'r':
+			newScen.rightScen = scen;
+			newScen.right = true;
+			break;
+		case 'b':
+			newScen.backScen = scen;
+			newScen.back = true;
+			break;
+		}
+		return scen;
 	}
 
 	public Scenario(int progress, int floor) {

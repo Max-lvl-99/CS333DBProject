@@ -45,6 +45,10 @@ public class Game {
 	public void main() throws SQLException {
 		floor = character.getFloor();
 		progress = character.getRoom();
+		if(progress!=0){
+			
+			current = Scenario.create(progress, floor);
+		}
 		while (true) {
 			act = getActions();
 			System.out.println("Health: " + this.character.getHP() + "/" + this.character.getMaxHP() + " Floor: "
