@@ -41,6 +41,16 @@ public class Scenario {
 			prevScen.leftScen = this;
 			if (!(left || back || forward)) {
 				deadend = true;
+				int i = (int) (Math.random()*3);
+				if(i ==0){
+					left = true;
+				}
+				else if(i ==1){
+					back = true;
+				}
+				else if(i ==2){
+					forward = true;
+				}
 			}
 			break;
 		case 'r':
@@ -49,6 +59,16 @@ public class Scenario {
 			prevScen.rightScen = this;
 			if (!(right || back || forward)) {
 				deadend = true;
+				int i = (int) (Math.random()*3);
+				if(i ==0){
+					right = true;
+				}
+				else if(i ==1){
+					back = true;
+				}
+				else if(i ==2){
+					forward = true;
+				}
 			}
 			break;
 		case 'f':
@@ -57,6 +77,16 @@ public class Scenario {
 			prevScen.forwardScen = this;
 			if (!(left || right || forward)) {
 				deadend = true;
+				int i = (int) (Math.random()*3);
+				if(i ==0){
+					left = true;
+				}
+				else if(i ==1){
+					right = true;
+				}
+				else if(i ==2){
+					forward = true;
+				}
 			}
 			break;
 		case 'b':
@@ -65,6 +95,16 @@ public class Scenario {
 			prevScen.backScen = this;
 			if (!(left || back || right)) {
 				deadend = true;
+				int i = (int) (Math.random()*3);
+				if(i ==0){
+					left = true;
+				}
+				else if(i ==1){
+					back = true;
+				}
+				else if(i ==2){
+					right = true;
+				}
 			}
 			break;
 		}

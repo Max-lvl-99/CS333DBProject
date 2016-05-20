@@ -169,13 +169,16 @@ public class Player {
 	}
 	
 	public void setLevel() throws SQLException {
+		int prevlevel = level;
 		stmt = con.prepareCall("{call getLevel(?,?,?)}");
 		stmt.setInt(1, chID);
 		stmt.setFloat(2, exp);
 		stmt.registerOutParameter(3, Types.INTEGER);
 		stmt.execute();
 		level = stmt.getInt(3);
-		System.out.println(level);
+		if(level>prevlevel){
+			System.out.println("You have levelled up!");
+		}
 		String sql = "{call getMultipliersLvl (?)}";
 		stmt = con.prepareCall(sql);
 		stmt.setInt(1, this.level);
@@ -185,7 +188,6 @@ public class Player {
 			this.hpMult = Float.parseFloat(res.getString(2));
 		}
 		this.maxHP = this.baseHP * this.hpMult;
-		System.out.println(dmgMult + " " + hpMult + " " + maxHP);
 	}
 	
 	public float getXP() {

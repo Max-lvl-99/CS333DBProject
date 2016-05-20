@@ -431,7 +431,7 @@ public class Game {
 			str.append(res.getString(2));
 			str.append(") ");
 			str.append("Damage increase (vs. no poison): x1" + res.getString(3).substring(1) + " for weapons of type "
-					+ res.getString(4) + ".  ");
+					+ res.getString(4) + ".  \n");
 			i++;
 			System.out.println(str.toString());
 			str = new StringBuilder();
@@ -456,7 +456,7 @@ public class Game {
 					str.append(poison);
 					str.append(", x1" + res.getString(5).substring(1) + " dmg. ");
 				}
-				str.append(" Type: " + res.getString(6));
+				str.append(" Type: " + res.getString(6)+"\n");
 				System.out.println(str.toString());
 				str = new StringBuilder();
 			}
@@ -474,7 +474,7 @@ public class Game {
 					str.append(", x1" + res.getString(5).substring(1) + " dmg. ");
 				}
 				i++;
-				str.append(" Type: " + res.getString(6));
+				str.append(" Type: " + res.getString(6) + "\n");
 				System.out.println(str.toString());
 				str = new StringBuilder();
 			}

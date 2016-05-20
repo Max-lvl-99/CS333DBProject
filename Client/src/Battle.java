@@ -138,14 +138,15 @@ public class Battle {
 				System.out.println("That item does not exist.");
 				return;
 			}
-			CallableStatement cs = con.prepareCall("{call getTypeandPotency(?,?,?)}");
+			CallableStatement cs = con.prepareCall("{call getTypeandPotency(?,?,?, ?)}");
 			cs.setString(1, d.get(i));
-			cs.registerOutParameter(2, Types.INTEGER);
-			cs.registerOutParameter(3, Types.FLOAT);
+			cs.setInt(2, p.getInID());
+			cs.registerOutParameter(3, Types.INTEGER);
+			cs.registerOutParameter(4, Types.FLOAT);
 			cs.execute();
-			float f = cs.getFloat(3);
-			if(cs.getInt(2) !=0){
-				p.heal(cs.getInt(2));
+			float f = cs.getFloat(4);
+			if(cs.getInt(3) !=0){
+				p.heal(cs.getInt(3));
 			}
 			break;
 		case "p":
@@ -244,7 +245,7 @@ public class Battle {
 			str.append(res.getString(2));
 			str.append(") ");
 			str.append("Damage increase (vs. no poison): x1" + res.getString(3).substring(1) + " for weapons of type "
-					+ res.getString(4) + ".  ");
+					+ res.getString(4) + ".\n  ");
 			i++;
 		}
 		System.out.println(str.toString());
